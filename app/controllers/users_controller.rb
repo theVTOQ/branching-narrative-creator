@@ -13,6 +13,11 @@ class UsersController < ApplicationController
         end
     end
 
+    def show
+        @user = User.find_by(id: params[:id])
+        return head(:forbidden) if @user.nil? || current_user.id != @user.id
+    end
+
     private
 
     def user_params
