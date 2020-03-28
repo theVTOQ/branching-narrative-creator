@@ -2,7 +2,7 @@
 <p>The goal: make creating branched narratives simple.</p>
   
 <% if name = session[:name] %>
-  <p>Welcome <%= name -%>! We know who you are thanks to Omniauth!</p>
+  <p>Welcome <%= name -%>!</p>
   <p>You were authenticated by  <%= session[:omniauth_data]['provider'] %></p>
 
   The raw data returned from Omniauth were:

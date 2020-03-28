@@ -1,0 +1,13 @@
+<h1>Create an Account</h1>
+<p>Or, sign up using <%= link_to "Github", "/auth/github" %></p>
+
+<%= form_for @user do |f| %>
+    <label>Name:</label>
+    <%= f.text_field :name %><br>
+    <label>Email:</label>
+    <%= f.text_field :email %><br>
+    <label>Password:</label>
+    <%= f.password_field :password %><br>
+
+    <%= f.submit "Create Account" %>
+<% end %>

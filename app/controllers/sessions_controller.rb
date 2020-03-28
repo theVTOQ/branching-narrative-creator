@@ -14,7 +14,12 @@ class SessionsController < ApplicationController
     # We're going to save the authentication information in the session
     # for demonstration purposes. We want to keep this data somewhere so that,
     # after redirect, we have access to the returned data
-    session[:name] = request.env['omniauth.auth']['info']['name']
+    omni_auth_data = request.env['omniauth.auth']['info']
+    user = Users.find_or_create_by(name: omni_auth_data[:name], email: omni_auth_data[:email])
+    password = omni_auth_data[:password]
+    redirect_to root_path if !password.nil? && !user.authenticate(password)
+
+    session[:name] =
     session[:omniauth_data] = request.env['omniauth.auth']
 
     # Ye olde redirect
