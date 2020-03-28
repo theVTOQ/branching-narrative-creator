@@ -5,12 +5,8 @@
   <p>Welcome <%= name -%>!</p>
   <p>You were authenticated by  <%= session[:omniauth_data]['provider'] %></p>
 
-  The raw data returned from Omniauth were:
-  <pre>
-    <%= session[:omniauth_data] %>
-  </pre>
   <br>
-  <%= link_to "Log out", logout_path, method: :delete %>
+  <%= link_to "Sign Out", signout_path, method: :delete %>
 <% else %>
   <p><%= link_to "Sign in", "/auth/developer" %> to continue or <%= link_to "Sign Up", "/signup" %> to get started.</p>  
   
