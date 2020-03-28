@@ -8,7 +8,7 @@
   <br>
   <%= link_to "Sign Out", signout_path, method: :delete %>
 <% else %>
-  <p><%= link_to "Sign in", "/auth/developer" %> to continue or <%= link_to "Sign Up", "/signup" %> to get started.</p>  
+  <p><%= link_to "Sign in", "/signin" %> to continue or <%= link_to "Sign Up", "/signup" %> to get started.</p>  
   
-  <p>Or ry <%= link_to 'Signing in with the GitHub strategy', '/auth/github'%>.</p>
+  <p>Or try <%= link_to 'Signing in with the GitHub strategy', '/auth/github'%>.</p>
 <% end %>

@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   #match '/auth/github/callback', to: 'sessions#create', via: [:get, :post]
   get '/welcome/home', to: 'welcome#home'
   get '/signup', to: 'users#new'
+  get '/signin', to: 'sessions#new'
+  post '/signin', to: 'sessions#create'
   delete '/signout' => 'sessions#destroy'
 
   resources :users, only: [:show, :create, :new]

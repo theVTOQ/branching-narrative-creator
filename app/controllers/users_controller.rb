@@ -9,6 +9,7 @@ class UsersController < ApplicationController
             session[:name] = @user.name
             redirect_to user_path(@user)
         else
+            #binding.pry
             render "new"
         end
     end
