@@ -8,6 +8,16 @@
             <li><%= link_to parent_document.title, document_path(parent_document) %></li>
         <% end %>
     </ul>
+
+    <h3>Associate this Outcome with an Existing Prior Choice:</h3>
+
+    <%= form_for @new_parent_branch do |f| %>
+        <%= f.fields_for :parent_document, @new_parent_branch.parent_document.build do |document_fields| %>
+            <%= document_fields.collection_select :parent_document, Document.eligible_parent_documents(@document), :id, :title %>
+        <% end %>
+
+        <%= f.submit "Create Branch" %>
+    <% end %>
 <% end %>
 
 <p><%= @document.passage %></p>
@@ -22,8 +32,8 @@
 <% if current_user_is_author %>
     <h3>Create a new Branch:</h3>
 
-    <%= form_for @new_branch do |f| %>
-        <%= f.fields_for :child_document, @new_branch.child_document.build do |document_fields| %>
+    <%= form_for @new_child_branch do |f| %>
+        <%= f.fields_for :child_document, @new_child_branch.child_document.build do |document_fields| %>
             <label>Title:</label>
             <%= document_fields.text_field :title %>
             <label>Passage:</label>
