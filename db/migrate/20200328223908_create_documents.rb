@@ -3,6 +3,7 @@ class CreateDocuments < ActiveRecord::Migration[5.2]
     create_table :documents do |t|
       t.string :title
       t.text :passage
+      t.integer :narrative_id
 
       t.timestamps
     end
