@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   # Add your routes here
-  root 'welcome#home'
   match '/auth/:provider/callback', to: 'sessions#create', via: [:get, :post]
   #match '/auth/github/callback', to: 'sessions#create', via: [:get, :post]
   get '/welcome/home', to: 'welcome#home'
@@ -9,5 +8,11 @@ Rails.application.routes.draw do
   post '/signin', to: 'sessions#create'
   delete '/signout' => 'sessions#destroy'
 
-  resources :users, only: [:show, :create, :new]
+  resources :users, only: [:show, :create, :new] do
+    resources :documents
+  end
+
+  resources :documents
+
+  root 'welcome#home'
 end
