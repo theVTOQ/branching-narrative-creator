@@ -1,0 +1,35 @@
+<h1><%= @document.title %></h1>
+<h2>Author: <%= @document.author_name %></h2>
+
+<% if current_user_is_author %>
+    <h3>Prior Choices that Lead to this Outcome:</h3>
+    <ul>
+        <% @document.parent_documents.each do |parent_document| %>
+            <li><%= link_to parent_document.title, document_path(parent_document) %></li>
+        <% end %>
+    </ul>
+<% end %>
+
+<p><%= @document.passage %></p>
+
+<h3>Choices:</h3>
+<ol>
+    <% @documents.child_documents.each do |child_document| %>
+        <li><%= link_to child_document.title, document_path(child_document) %></li>
+    <% end %>
+</ol>
+
+<% if current_user_is_author %>
+    <h3>Create a new Branch:</h3>
+
+    <%= form_for @new_branch do |f| %>
+        <%= f.fields_for :child_document, @new_branch.child_document.build do |document_fields| %>
+            <label>Title:</label>
+            <%= document_fields.text_field :title %>
+            <label>Passage:</label>
+            <%= document_fields.text_area_field :passage %>
+        <% end %>
+
+        <%= f.submit "Create Branch" %>
+    <% end %>
+<% end %>

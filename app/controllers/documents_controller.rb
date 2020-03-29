@@ -4,6 +4,7 @@ class DocumentsController < ApplicationController
     skip_before_action :require_login, only: [:new, :create]
 
     def show
+        @new_branch = Branch.new(parent_document_id: @document.id)
     end
 
     def create

@@ -14,5 +14,7 @@ Rails.application.routes.draw do
 
   resources :documents
 
+  resources :branches, only: [:show, :create, :update, :edit, :destroy]
+
   root 'welcome#home'
 end
