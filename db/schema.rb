@@ -10,7 +10,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_28_154840) do
+ActiveRecord::Schema.define(version: 2020_03_29_164807) do
+
+  create_table "branches", force: :cascade do |t|
+    t.integer "parent_document_id"
+    t.integer "child_document_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "documents", force: :cascade do |t|
+    t.string "title"
+    t.text "passage"
+    t.integer "narrative_id"
+    t.boolean "is_root"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["narrative_id"], name: "index_documents_on_narrative_id"
+  end
+
+  create_table "narratives", force: :cascade do |t|
+    t.string "title"
+    t.integer "author_id"
+    t.boolean "is_public"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "name"

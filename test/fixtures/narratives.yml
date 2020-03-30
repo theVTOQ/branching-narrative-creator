@@ -1,0 +1,7 @@
+equinox
+  title: "equinox"
+  author_id: users(:wilfred).id
+
+  solstice
+    title: "solstice"
+    author_id: users(:wilfred).id
