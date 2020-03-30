@@ -11,6 +11,11 @@ class NarrativesController < ApplicationController
         @narratives = Narrative.all
     end
 
+    def documents_index
+        @documents = @narrative.documents
+        render template: 'documents/index'
+    end
+
     def create
         @narrative = Narrative.new(narrative_params)
         if @narrative.save
@@ -43,10 +48,9 @@ class NarrativesController < ApplicationController
 
     private
 
-    def find_document
-        #key = ? :
-
-        @document = Document.find_by(id: params[:document_id])
+    def find_narrative
+        key = params[:branch_id].nil? ?  :id : :branch_id
+        @document = Document.find_by(id: params[key])
     end
 
     def document_params

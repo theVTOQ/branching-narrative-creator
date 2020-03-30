@@ -47,9 +47,8 @@ class DocumentsController < ApplicationController
     private
 
     def find_document
-        #key = ? :
-
-        @document = Document.find_by(id: params[:document_id])
+        key = params[:document_id].nil? ?  :id : :document_id
+        @document = Document.find_by(id: params[key])
     end
 
     def document_params
