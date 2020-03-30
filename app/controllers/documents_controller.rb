@@ -19,9 +19,11 @@ class DocumentsController < ApplicationController
 
     def new
         @document = Document.new
+        prefix = "Create"
     end
 
     def edit
+        prefix = "Update"
     end
 
     def update
