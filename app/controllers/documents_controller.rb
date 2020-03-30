@@ -33,7 +33,9 @@ class DocumentsController < ApplicationController
     end
 
     def destroy
-        @document.destroy
+        @document.branches.delete_all
+        @document.delete
+        #it is conceivable that we might want to keep documents intact even if we delete one of their parent or child documents
     end
 
     private

@@ -26,6 +26,6 @@
     <% end %>
 
     <%= form_with(url: "/narratives/#{@narrative.id}", method: "delete") %>
-    
+        <%= f.submit "Delete Narrative" %>
     <% end %>
 <% end %>

@@ -42,4 +42,8 @@
 
         <%= f.submit "Create Branch" %>
     <% end %>
+
+    <%= form_with(url: "/documents/#{@document.id}", method: "delete") %>
+        <%= f.submit "Delete Document" %>
+    <% end %>
 <% end %>
