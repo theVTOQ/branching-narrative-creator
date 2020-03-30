@@ -8,6 +8,10 @@ class DocumentsController < ApplicationController
         @new_child_branch = Branch.new(parent_document_id: @document.id)
     end
 
+    def index
+        @documents = current_user.documents
+    end
+
     def create
         @document = Document.new(document_params)
         if @document.save
@@ -49,6 +53,6 @@ class DocumentsController < ApplicationController
     end
 
     def document_params
-        params.require("document").permit("title", "passage", "branches_attributes")
+        params.require("document").permit("title", "passage", "branches_attributes", "narrative_id")
     end
 end

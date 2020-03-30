@@ -23,6 +23,16 @@ class UsersController < ApplicationController
         end
     end
 
+    def narratives_index
+        @narratives = @user.narratives
+        render template: 'narratives/index'
+    end
+
+    def documents_index
+        @documents = @user.documents
+        render template: 'documents/index'
+    end
+
     private
 
     def user_params

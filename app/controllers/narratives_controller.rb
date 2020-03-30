@@ -7,6 +7,10 @@ class NarrativesController < ApplicationController
         @new_root_document = Document.new(narrative_id: self.id)    
     end
 
+    def index
+        @narratives = Narrative.all
+    end
+
     def create
         @narrative = Narrative.new(narrative_params)
         if @narrative.save
