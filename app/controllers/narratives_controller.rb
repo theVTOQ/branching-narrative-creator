@@ -1,27 +1,28 @@
-class DocumentsController < ApplicationController
-    before_action :find_document
-    skip_before_action :find_document, only: [:new, :create]
+class NarrativesController < ApplicationController
+    before_action :find_narrative
+    skip_before_action :find_narrative, only: [:new, :create]
     #skip_before_action :require_login, only: [:new, :create]
 
     def show
-        @new_parent_branch = Branch.new(child_document_id: @document.id)
-        @new_child_branch = Branch.new(parent_document_id: @document.id)
+        @new_root_document = Document.new(narrative_id: self.id)    
     end
 
     def create
-        @document = Document.new(document_params)
-        if @document.save
-            redirect_to document_path(@document)
+        @narrative = Narrative.new(narrative_params)
+        if @narrative.save
+            redirect_to narrative_path(@narrative)
         else
             render "new"
         end
     end
 
     def new
-        @document = Document.new
+        @narrative = Narrative.new(user_id: current_user.id)
+        @prefix = "Create"
     end
 
     def edit
+        @prefix = "Update"
     end
 
     def update

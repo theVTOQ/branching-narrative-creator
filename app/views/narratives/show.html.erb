@@ -1,0 +1,31 @@
+<h1><%= @narrative.title %></h1>
+<h2>Author: <%= @narrative.author_name %></h2>
+
+<% if current_user_has_edit_access_to(@narrative) %>
+    <%= link_to "Edit this Narrative", edit_narrative_path(@narrative) %>
+<% end %>
+<%= link_to "Create a new Narrative", new_narrative_path %>
+
+<h3>Root Documents:</h3>
+<ul>
+    <% @narrative.root_documents.each do |root_doc| %>
+        <li><%= link_to root_doc.title, document_path(root_doc) %></li>
+    <% end %>
+</ul>
+
+<% if current_user_has_access %>
+    <h3>Create New Root Document</h3>
+    <%= form_for @new_root_document do |f| %>
+        <label>Title:</label>
+        <%= f.text_field :title %>
+
+        <label>Passage:</label>
+        <%= f.text_area_field :passage %>
+
+        <%= f.submit "Create Root Document" %>
+    <% end %>
+
+    <%= form_with(url: "/narratives/#{@narrative.id}", method: "delete") %>
+    
+    <% end %>
+<% end %>

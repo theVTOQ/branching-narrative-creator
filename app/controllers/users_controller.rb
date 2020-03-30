@@ -15,8 +15,12 @@ class UsersController < ApplicationController
     end
 
     def show
-        @user = User.find_by(id: params[:id])
-        return head(:forbidden) if @user.nil? || current_user.id != @user.id
+        if @user.nil? || current_user.id != @user.id
+            return head(:forbidden) 
+        else
+            @user = User.find_by(id: params[:id])
+            @new_narrative = Narrative.new(user_id: @user.id)
+        end
     end
 
     private

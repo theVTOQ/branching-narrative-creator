@@ -11,8 +11,13 @@ class ApplicationController < ActionController::Base
         !session[:name].nil?
     end
 
-    def user_has_access(user_id)
-        current_user.id == user_id
+    def current_user_has_edit_access_to_narrative(narrative)
+        current_user.id == narrative.user.id
+    end
+
+    def current_user_has_edit_access_to_document(document)
+        current_user_has_edit_access_to_narrative(document.narrative)
+        #current_user.id == document.narrative.user.id
     end
 
     def require_login
@@ -21,4 +26,8 @@ class ApplicationController < ActionController::Base
             redirect_to "/signin"
         end
     end
+
+    #def form_submit_message_prefix(is_new)
+    #    is_new ? "Create" : "Update"
+    #end
 end

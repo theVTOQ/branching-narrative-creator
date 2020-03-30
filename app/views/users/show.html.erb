@@ -1,4 +1,18 @@
 <h1>Hello, <%= @user.name %></h1>
 <h3><%= @user.email %></h3>
 
+<h2>Narratives:</h2>
+<% @user.narratives.each do |narrative| %>
+    <%= link_to narrative.title, narrative_path(narrative) %>
+<% end %>
+
+<h3>Create a New Narrative:</h3>
+<%= form_for @new_narrative do |f| %>
+    <label>Title:</label>
+    <%= f.text_field :title %>
+    
+    <%= f.submit "Create Narrative" %>
+<% end %>
+
+
 <%= link_to "Sign Out", signout_path, method: :delete %>

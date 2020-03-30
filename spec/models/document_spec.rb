@@ -76,8 +76,6 @@ RSpec.describe Document, :type => :model do
       parent_document_id: @equinox_ritual_commenced.id, 
       child_document_id: @solemnity_projected.id
     )
-    #@equinox_ritual_commenced.branches << triumph_branch
-    #@equinox_ritual_commenced.branches << solemnity_branch
     
     expect(@equinox_ritual_commenced.child_documents).to eq([@triumph_projected, @solemnity_projected])
     expect(@triumph_projected.parent_documents).to eq([@equinox_ritual_commenced])
