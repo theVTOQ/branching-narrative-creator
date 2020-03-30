@@ -44,6 +44,6 @@ class DocumentsController < ApplicationController
     end
 
     def document_params
-        params.require("document").permit("title", "passage")
+        params.require("document").permit("title", "passage", "branches_attributes")
     end
 end
