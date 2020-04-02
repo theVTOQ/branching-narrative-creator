@@ -4,11 +4,11 @@ class ApplicationController < ActionController::Base
     private
     
     def current_user
-        User.find_by(name: session[:name])
+        User.find_by(id: session[:user_id])
     end
 
     def logged_in
-        !session[:name].nil?
+        !session[:user_id].nil?
     end
 
     def current_user_has_edit_access_to_narrative(narrative)

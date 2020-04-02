@@ -2,7 +2,7 @@ class Document < ApplicationRecord
     include ActiveModel::Validations
     validates :narrative_id, presence: true
     validates :title, presence: true, length: { minimum: 2, maximum: 40}
-    validates_with TitleValidator
+    validates_with DocumentTitleValidator
     before_validation :set_default_values
 
     #has_and_belongs_to_many :parent_documents, class_name: "document", join_table: "branches", foreign_key: "parent_document_id", association_foreign_key: "child_document_id"

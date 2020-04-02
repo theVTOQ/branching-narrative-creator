@@ -29,7 +29,7 @@ class SessionsController < ApplicationController
       if user.nil?
         redirect_to "/signin", alert: "No such email found."
       elsif user.authenticate(params[:password])
-        session[:name] = user.name
+        session[:user_id] = user.id
         redirect_to user_path(user)
       else
         flash[:notice] = "Incorrect password."
