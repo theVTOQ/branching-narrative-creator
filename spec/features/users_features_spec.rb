@@ -46,7 +46,7 @@ describe 'Feature Test: User Signout', :type => :feature do
     visit '/users/new'
     # user_signup method is defined in login_helper.rb
     user_signup
-    click_link("Log Out")
+    click_link("Sign Out")
     expect(current_path).to eq('/')
   end
 
@@ -64,6 +64,10 @@ describe 'Feature Test: Create a Narrative', :type => :feature do
   before :each do
     visit '/users/new'
     user_signup
+    new_user = Users.first
+    new_user.admin = true
+    new_user.save
+
     @public_narrative = Narrative.create(user_id: User.first.id, title: "Public Test", is_public)
     @private_narrative = Narrative.create(user_id: User.first.id, title: "Private Test")
   end
@@ -73,10 +77,19 @@ describe 'Feature Test: Create a Narrative', :type => :feature do
     expect(current_path).to eq('/narratives')
   end
   
-  it 'links from the user show page to the narratives index page, but only displays links to public narratives' do
+  it 'links from the user show page to the narratives index page, but only displays links to public narratives if user is not admin' do
     click_link('Browse Narratives')
     expect(page).to have_content("Public Test")
     expect(page).to_not have_content("Private Test")
+  end
+
+  it 'links from the user show page to the narratives index page, but only displays links to both public and private narratives if user is admin' do
+    click_link('Sign Out')
+    click_link('Sign In')
+    admin_signup
+    click_link('Browse Narratives')
+    expect(page).to have_content("Public Test")
+    expect(page).to have_content("Private Test")
   end
 
   it 'displays a list of the users authored narratives' do

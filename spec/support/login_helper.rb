@@ -4,7 +4,7 @@ module LoginHelper
       fill_in("user[name]", :with => "Ziggy")
       fill_in("user[email]", :with => "zig@zig.com")
       fill_in("user[password]", :with => "zig")
-      click_button('Create User')
+      click_button('Create Account')
     end
   
     def user_login
@@ -14,16 +14,18 @@ module LoginHelper
     end
   
     def admin_signup
-      fill_in("user[name]", :with => "Walt Disney")
-      fill_in("user[password]", :with => "password")
-      find(:css, "#user_admin").set(true)
-      click_button('Create User')
+      fill_in("user[name]", :with => "Boss")
+      fill_in("user[password]", :with => "boss")
+      #find(:css, "#user_admin").set(true)
+      click_button('Create Account')
+      User.last.admin = true
+      User.last.save
     end
   
     def admin_login
-      select 'Walt Disney',from:'user_name'
-      fill_in("password", :with => "password")
-      click_button('Sign In')
+        fill_in("user[email]", :with => "zig@zig.com")
+        fill_in("user[password]", :with => "zig")
+        click_button('Sign In')
     end
   
     def create_standard_user 

@@ -18,4 +18,9 @@ RSpec.describe Narrative, :type => :model do
     @copy_of_narrative = Narrative.create(user_id: @user.id, title: "Test")
     expect(@copy_of_narrative).to_not be_valid
   end
+
+  #To-Do:
+  #it "is findable by a slug of its title" do 
+  #  expect(Narrative.find_by(slug: @narrative.slug)).to eq(@narrative)
+  #end
 end

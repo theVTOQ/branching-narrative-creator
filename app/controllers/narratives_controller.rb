@@ -8,7 +8,7 @@ class NarrativesController < ApplicationController
     end
 
     def index
-        @narratives = Narrative.find_by(is_public: true)
+        @narratives = current_user.admin ? Narrative.all : Narrative.find_by(is_public: true)
     end
 
     def documents_index
