@@ -92,7 +92,7 @@ describe 'Feature Test: Create a Narrative', :type => :feature do
     expect(page).to have_content("Private Test")
   end
 
-  it 'displays a list of the users authored narratives' do
+  it "displays a list of the users' authored narratives" do
     expect(page).to have_content("Your Narratives")
     expect(page).to have_content("Public Test")
     expect(page).to have_content("Private Test")
@@ -100,6 +100,7 @@ describe 'Feature Test: Create a Narrative', :type => :feature do
 
   it 'allows users to create a new narrative from their show page' do
     fill_in("narrative[title]", :with => "Triumph")
+    find(:css, "#narrative_is_public").set(true)
     click_button('Create Narrative')
     expect(current_path).to eq('/users/narratives/3')
     expect(page).to have_content("Triumph")    
@@ -119,100 +120,44 @@ describe 'Feature Test: Create a Narrative', :type => :feature do
     expect(page).to_not have_content("delete")
     expect(page).to_not have_content("new attraction")
   end
-  
-  it 'prevents users from viewing a list of all documents in the database' do
 
+  it "links from the narratives index page to the narratives' show pages" do
+    click_link('Browse Narratives')
+    click_link("#{@public_narrative.title}")
+    expect(current_path).to eq("/narratives/1")
   end
 
-  it 'has titles of the rides on the attractions index page' do
-    click_link('See attractions')
-    expect(page).to have_content("#{@ferriswheel.name}")
-    expect(page).to have_content("#{@rollercoaster.name}")
+  it 'allows users to edit/delete a narrative they have created' do
+    click_link('Browse attractions')
+    click_link("#{@public_narrative.name}")
+    expect(page).to have_content("edit")
+    expect(page).to have_content("delete")
   end
 
-  it "has links on the attractions index page to the attractions' show pages" do
-    click_link('See attractions')
-    expect(page).to have_content("Go on #{@ferriswheel.name}")
-    expect(page).to have_content("Go on #{@rollercoaster.name}")
-  end
+  it 'prevents users from editing/deleting a narrative they have not created, even if they are admin' do
+    click_link('Sign Out')
+    admin_login
 
-  it "links from the attractions index page to the attractions' show pages" do
-    click_link('See attractions')
-    click_link("Go on #{@ferriswheel.name}")
-    expect(current_path).to eq("/attractions/2")
-  end
-
-  it 'prevents users from editing/deleting a ride on the show page' do
-    click_link('See attractions')
-    click_link("Go on #{@ferriswheel.name}")
+    click_link('Browse Narratives')
+    click_link("#{@public_narrative.name}")
     expect(page).to_not have_content("edit")
     expect(page).to_not have_content("delete")
   end
 
-  it "has a button from the attraction show page to go on the ride" do
-    click_link('See attractions')
-    click_link("Go on #{@ferriswheel.name}")
-    expect(current_path).to eq("/attractions/2")
-    expect(page).to have_button("Go on this ride")
+  
+
+  it 'allows users to edit a narrative they have created' do
+
   end
 
-  it "clicking on 'Go on ride' redirects to user show page" do
-    click_link('See attractions')
-    click_link("Go on #{@ferriswheel.name}")
-    click_button("Go on this ride")
-    expect(current_path).to eq("/users/1")
+  it 'prevents users from viewing a list of all documents in the database if they are not admin' do
+    visit '/documents'
+    expect(current_path).to_not eq('/documents')
   end
 
-  it "clicking on 'Go on ride' updates the users ticket number" do
-    click_link('See attractions')
-    click_link("Go on #{@ferriswheel.name}")
-    click_button("Go on this ride")
-    expect(page).to have_content("Tickets: 13")
-  end
-
-  it "clicking on 'Go on ride' updates the users mood" do
-    click_link('See attractions')
-    click_link("Go on #{@teacups.name}")
-    click_button("Go on this ride")
-    expect(page).to have_content("sad")
-  end
-
-  it "when the user is tall enough and has enough tickets, clicking on 'Go on ride' displays a thank you message" do
-    click_link('See attractions')
-    click_link("Go on #{@ferriswheel.name}")
-    click_button("Go on this ride")
-    expect(page).to have_content("Thanks for riding the #{@ferriswheel.name}!")
-  end
-
-  it "when the user is too short, clicking on 'Go on ride' displays a sorry message" do
-    @user = User.find_by(:name => "Amy Poehler")
-    @user.update(:height => 10)
-    click_link('See attractions')
-    click_link("Go on #{@teacups.name}")
-    click_button("Go on this ride")
-    expect(page).to have_content("You are not tall enough to ride the #{@teacups.name}")
-    expect(page).to have_content("happy")
-  end
-
-  it "when the user doesn't have enough tickets, clicking on 'Go on ride' displays a sorry message" do
-    @user = User.find_by(:name => "Amy Poehler")
-    @user.update(:tickets => 1)
-    click_link('See attractions')
-    click_link("Go on #{@ferriswheel.name}")
-    click_button("Go on this ride")
-    expect(page).to have_content("You do not have enough tickets to ride the #{@ferriswheel.name}")
-    expect(page).to have_content("Tickets: 1")
-  end
-
-  it "when the user is too short and doesn't have enough tickets, clicking on 'Go on ride' displays a detailed sorry message" do
-    @user = User.find_by(:name => "Amy Poehler")
-    @user.update(:tickets => 1, :height => 30)
-    click_link('See attractions')
-    click_link("Go on #{@rollercoaster.name}")
-    click_button("Go on this ride")
-    expect(page).to have_content("You are not tall enough to ride the #{@rollercoaster.name}")
-    expect(page).to have_content("You do not have enough tickets to ride the #{@rollercoaster.name}")
-    expect(page).to have_content("Tickets: 1")
+  it 'allows admin users to view a list of all documents in the database' do
+    visit '/documents'
+    expect(current_path).to eq('/documents')
   end
 end
 
