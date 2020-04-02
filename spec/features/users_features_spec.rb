@@ -64,26 +64,51 @@ describe 'Feature Test: Create a Narrative', :type => :feature do
   before :each do
     visit '/users/new'
     user_signup
+    @public_narrative = Narrative.create(user_id: User.first.id, title: "Public Test", is_public)
+    @private_narrative = Narrative.create(user_id: User.first.id, title: "Private Test")
   end
 
-  it 'has a link from the user show page to the attractions index page' do
-    expect(page).to have_content("Narratives")
+  it 'links from the user show page to the narratives index page' do
+    click_link('Browse Narratives')
+    expect(current_path).to eq('/narratives')
+  end
+  
+  it 'links from the user show page to the narratives index page, but only displays links to public narratives' do
+    click_link('Browse Narratives')
+    expect(page).to have_content("Public Test")
+    expect(page).to_not have_content("Private Test")
+  end
+
+  it 'displays a list of the users authored narratives' do
+    expect(page).to have_content("Your Narratives")
+    expect(page).to have_content("Public Test")
+    expect(page).to have_content("Private Test")
+  end
+
+  it 'allows users to create a new narrative from their show page' do
     fill_in("narrative[title]", :with => "Triumph")
     click_button('Create Narrative')
-    expect(current_path).to eq('/users/narratives/1')
+    expect(current_path).to eq('/users/narratives/3')
+    expect(page).to have_content("Triumph")    
   end
 
-  it 'links from the user show page to the attractions index page' do
-    click_link('See attractions')
-    expect(current_path).to eq('/attractions')
-  end
-
-  it 'prevents users from editing/deleting/adding rides on the index page' do
-    click_link('See attractions')
-    expect(current_path).to eq('/attractions')
+  it 'prevents users from creating, editing or deleting a narrative from the narrative index page' do
+    click_link('Browse Narratives')
     expect(page).to_not have_content("edit")
     expect(page).to_not have_content("delete")
     expect(page).to_not have_content("new attraction")
+  end
+
+  it 'prevents users from creating, editing or deleting a narrative from the narrative index page, even when viewing the narratives they have authored' do
+    click_link('Your Narratives')
+    expect(current_path).to eq('/users/1/narratives')
+    expect(page).to_not have_content("edit")
+    expect(page).to_not have_content("delete")
+    expect(page).to_not have_content("new attraction")
+  end
+  
+  it 'prevents users from viewing a list of all documents in the database' do
+
   end
 
   it 'has titles of the rides on the attractions index page' do

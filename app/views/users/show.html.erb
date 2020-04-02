@@ -1,7 +1,9 @@
 <h1>Hello, <%= @user.name %></h1>
 <h3><%= @user.email %></h3>
 
-<h2>Narratives:</h2>
+<h2><%= link_to "Browse Narratives", narratives_path %></h2>
+
+<h2><%= link_to "Your Narratives:", user_narratives_path(@user) %></h2>
 <% @user.narratives.each do |narrative| %>
     <%= link_to narrative.title, narrative_path(narrative) %>
 <% end %>

@@ -2,6 +2,8 @@
 <h2>Author: <%= @narrative.author_name %></h2>
 
 <% if current_user_has_edit_access_to(@narrative) %>
+    <p>Is <%= "not" unless @narrative.is_public %> public</p>
+    
     <%= link_to "Edit this Narrative", edit_narrative_path(@narrative) %>
 <% end %>
 <%= link_to "Create a new Narrative", new_narrative_path %>
