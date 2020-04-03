@@ -1,14 +1,4 @@
-<h1>Welcome to the Branching Narrative Creator!</h1>
-<p>The goal: make creating branched narratives simple.</p>
-  
-<% if name = session[:name] %>
-  <p>Welcome <%= name -%>!</p>
-  <p>You were authenticated by  <%= session[:omniauth_data]['provider'] %></p>
+<p><%= link_to "Sign in", "/signin" %> to continue or <%= link_to "Sign Up", "/signup" %> to get started.</p>  
 
-  <br>
-  <%= link_to "Sign Out", signout_path, method: :delete %>
-<% else %>
-  <p><%= link_to "Sign in", "/signin" %> to continue or <%= link_to "Sign Up", "/signup" %> to get started.</p>  
-  
-  <p>Or try <%= link_to 'Signing in with the GitHub strategy', '/auth/github'%>.</p>
-<% end %>
+<p>Or try <%= link_to 'Signing in with the GitHub strategy', '/auth/github'%>.</p>
+

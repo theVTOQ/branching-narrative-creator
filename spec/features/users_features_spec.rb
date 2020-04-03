@@ -68,7 +68,7 @@ describe 'Feature Test: Create a Narrative', :type => :feature do
     new_user.admin = true
     new_user.save
 
-    @public_narrative = Narrative.create(user_id: User.first.id, title: "Public Test", is_public)
+    @public_narrative = Narrative.create(user_id: User.first.id, title: "Public Test", is_public: true)
     @private_narrative = Narrative.create(user_id: User.first.id, title: "Private Test")
   end
 

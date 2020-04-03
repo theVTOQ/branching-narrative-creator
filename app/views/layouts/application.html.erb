@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>OmniauthLab</title>
+    <title>Branching Narrative Creator</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -10,6 +10,14 @@
   </head>
 
   <body>
+    <h1>Welcome to the Branching Narrative Creator!</h1>
+    <p>The goal: make creating branched narratives simple.</p>
+    
     <%= yield %>
+
+    <% if logged_in %>
+      <%= link_to "Sign Out", signout_path, method: :delete %>
+    <% end %> 
+    
   </body>
 </html>

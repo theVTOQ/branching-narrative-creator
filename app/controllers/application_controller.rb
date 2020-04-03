@@ -1,14 +1,15 @@
 class ApplicationController < ActionController::Base
     before_action :require_login
-
+    helper_method :logged_in
+    
     private
     
     def current_user
-        User.find_by(id: session[:user_id])
+        User.find_by(email: session[:email])
     end
 
     def logged_in
-        !session[:user_id].nil?
+        !session[:email].nil?
     end
 
     def current_user_has_edit_access_to_narrative(narrative)

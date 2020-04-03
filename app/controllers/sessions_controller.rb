@@ -2,6 +2,7 @@ class SessionsController < ApplicationController
   # This is required because of a quirk the "developer" authentication
   # strategy. We'll remove this when we move to a "real" provider.
   skip_before_action :verify_authenticity_token, only: :create
+  skip_before_action :require_login, only: [:new, :create, :destroy]
 
   def new
   end
@@ -19,7 +20,7 @@ class SessionsController < ApplicationController
       # We're going to save the authentication information in the session
       # for demonstration purposes. We want to keep this data somewhere so that,
       # after redirect, we have access to the returned data
-      session[:name] = request.env['omniauth.auth']['info']['name']
+      session[:email] = request.env['omniauth.auth']['info']['email']
       session[:omniauth_data] = request.env['omniauth.auth']
 
       # Ye olde redirect
@@ -29,7 +30,7 @@ class SessionsController < ApplicationController
       if user.nil?
         redirect_to "/signin", alert: "No such email found."
       elsif user.authenticate(params[:password])
-        session[:user_id] = user.id
+        session[:email] = user.email
         redirect_to user_path(user)
       else
         flash[:notice] = "Incorrect password."
