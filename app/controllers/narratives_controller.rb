@@ -8,7 +8,16 @@ class NarrativesController < ApplicationController
     end
 
     def index
-        @narratives = current_user.admin ? Narrative.all : Narrative.find_by(is_public: true)
+        @prefix = ""
+        if params[:user_id] 
+            @narratives = current_user.narratives
+            @prefix = "Your "
+        elsif current_user.admin
+            @narratives = Narrative.all
+        else
+            @narratives = Narrative.all.where(is_public: true)
+        end
+        #binding.pry
     end
 
     def documents_index

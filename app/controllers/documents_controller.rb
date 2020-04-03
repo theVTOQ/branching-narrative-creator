@@ -9,7 +9,15 @@ class DocumentsController < ApplicationController
     end
 
     def index
-        @documents = current_user.documents
+        @prefix = ""
+        if params[:user_id] 
+            @documents = current_user.documents
+            @prefix = "Your "
+        elsif current_user.admin
+            @documents = Document.all
+        else
+            redirect_to user_path(current_user), alert: "You do not have access."
+        end
     end
 
     def create

@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
     before_action :require_login
     helper_method :logged_in
-    
+
     private
     
     def current_user
@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
     end
 
     def logged_in
-        !session[:email].nil?
+        !current_user.nil?
     end
 
     def current_user_has_edit_access_to_narrative(narrative)

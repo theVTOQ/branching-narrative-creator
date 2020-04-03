@@ -13,6 +13,10 @@
     <h1>Welcome to the Branching Narrative Creator!</h1>
     <p>The goal: make creating branched narratives simple.</p>
     
+    <% if logged_in %>
+      <%= link_to "Create a New Narrative!", new_narrative_path %>
+    <% end %>
+
     <%= yield %>
 
     <% if logged_in %>

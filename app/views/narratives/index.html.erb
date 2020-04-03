@@ -1,4 +1,4 @@
-<h1>Narratives:</h1>
+<h1><%= @prefix %>Narratives:</h1>
 <ul>
     <% @narratives.each do |narrative| %>
         <li><%= link_to narrative.title, narrative_path(narrative) %></li>

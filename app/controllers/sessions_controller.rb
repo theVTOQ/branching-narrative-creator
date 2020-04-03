@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    binding.pry
+    #binding.pry
     if params[:email].nil?
       # After entering a name and email value in the /auth/developer
       # path and submitting the form, you will see a pretty-print of

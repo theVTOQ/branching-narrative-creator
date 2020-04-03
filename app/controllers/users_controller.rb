@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
+    before_action :find_user
+    skip_before_action :find_user, only: [:new, :create]
     skip_before_action :require_login, only: [:new, :create]
-    
+
     def new
         @user = User.new
     end
@@ -8,7 +10,7 @@ class UsersController < ApplicationController
     def create
         @user = User.new(user_params)
         if @user.save
-            session[:user_id] = @user.id
+            session[:email] = @user.email
             redirect_to user_path(@user)
         else
             #binding.pry
@@ -18,6 +20,7 @@ class UsersController < ApplicationController
 
     def show
         if @user.nil? || current_user.id != @user.id
+            #binding.pry
             return head(:forbidden) 
         else
             @user = User.find_by(id: params[:id])
@@ -25,19 +28,25 @@ class UsersController < ApplicationController
         end
     end
 
-    def narratives_index
-        @narratives = @user.narratives
-        render template: 'narratives/index'
-    end
+    #def narratives_index
+    #    @prefix = "Your "
+    #    @narratives = @user.narratives
+    #    binding.pry
+    #    render template: 'narratives/index'
+    #end
 
-    def documents_index
-        @documents = @user.documents
-        render template: 'documents/index'
-    end
+    #def documents_index
+    #    @documents = @user.documents
+    #    render template: 'documents/index'
+    #end
 
     private
 
     def user_params
         params.require('user').permit('name', 'email', 'password')
+    end
+
+    def find_user
+        @user = User.find_by(email: session[:email])
     end
 end

@@ -1,9 +1,9 @@
-<h1>Hello, <%= @user.name %></h1>
-<h3><%= @user.email %></h3>
+<h2>Hello, <%= @user.name %></h2>
+<h5><%= @user.email %></h5>
 
-<h2><%= link_to "Browse Narratives", narratives_path %></h2>
+<h4><%= link_to "Browse Narratives", narratives_path %></h4>
 
-<h2><%= link_to "Your Narratives:", user_narratives_path(@user) %></h2>
+<h4><%= link_to "Your Narratives:", user_narratives_path(@user) %></h4>
 <% @user.narratives.each do |narrative| %>
     <%= link_to narrative.title, narrative_path(narrative) %>
 <% end %>
@@ -15,6 +15,4 @@
     
     <%= f.submit "Create Narrative" %>
 <% end %>
-
-
-<%= link_to "Sign Out", signout_path, method: :delete %>
+<br>
