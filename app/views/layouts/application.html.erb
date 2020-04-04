@@ -14,6 +14,8 @@
     <p>The goal: make creating branched narratives simple.</p>
     
     <% if logged_in %>
+      <%= link_to "Browse Narratives", narratives_path %>
+      <%= link_to "View my Narratives", user_narratives_path(current_user) %>
       <%= link_to "Create a New Narrative!", new_narrative_path %>
     <% end %>
 

@@ -46,7 +46,7 @@ class NarrativesController < ApplicationController
     end
 
     def update
-        if @narrative.update(narrative_params)
+        if @narrative.update!(narrative_params)
             redirect_to narrative_path(@narrative)
         else
             render "edit"
