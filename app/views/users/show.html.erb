@@ -1,12 +1,19 @@
 <h2>Hello, <%= @user.name %></h2>
 <h5><%= @user.email %></h5>
+<% if @user.admin %>
+    <p>You Have Admin Access</p>
+<% end %>
 
-<h4><%= link_to "Browse Narratives", narratives_path %></h4>
+<% flash.each do |type, msg| %>
+    <%= msg %>
+<% end %>
 
 <h4><%= link_to "Your Narratives:", user_narratives_path(@user) %></h4>
-<% @user.narratives.each do |narrative| %>
-    <%= link_to narrative.title, narrative_path(narrative) %>
-<% end %>
+<ul>
+    <% @user.narratives.each do |narrative| %>
+        <li><%= link_to narrative.title, narrative_path(narrative) %></li>
+    <% end %>
+</ul>
 
 <h3>Create a New Narrative:</h3>
 <%= form_for @new_narrative do |f| %>

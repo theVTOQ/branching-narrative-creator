@@ -1,18 +1,23 @@
 <h1><%= @document.title %></h1>
-<h2>Author: <%= @document.author_name %></h2>
+<h5>Author: <%= @document.author_name %></h5>
+<p><%= @document.passage %></p>
 
 <% if @user_can_edit %>
-    <h3>Prior Choices that Lead to this Outcome:</h3>
-    <ul>
-        <% @document.parent_documents.each do |parent_document| %>
-            <li><%= link_to parent_document.title, document_path(parent_document) %></li>
-        <% end %>
-    </ul>
-
+    <% if @document.is_root %>
+        <p>Is Root Document</p>
+    <% else %>
+        <h3>Prior Choices that Lead to this Outcome:</h3>
+        <ul>
+            <% @document.parent_documents.each do |parent_document| %>
+                <li><%= link_to parent_document.title, document_path(parent_document) %></li>
+            <% end %>
+        </ul>
+    <% end %>
+    
     <h3>Associate this Outcome with an Existing Prior Choice:</h3>
 
     <%= form_for @new_parent_branch do |f| %>
-        <%= f.fields_for :parent_document, @new_parent_branch.parent_document.build do |document_fields| %>
+        <%= f.fields_for :parent_document, @new_parent_branch.parent_document do |document_fields| %>
             <%= document_fields.collection_select :parent_document, Document.eligible_parent_documents(@document), :id, :title %>
         <% end %>
 
@@ -20,11 +25,9 @@
     <% end %>
 <% end %>
 
-<p><%= @document.passage %></p>
-
 <h3>Choices:</h3>
 <ol>
-    <% @documents.child_documents.each do |child_document| %>
+    <% @document.child_documents.each do |child_document| %>
         <li><%= link_to child_document.title, document_path(child_document) %></li>
     <% end %>
 </ol>
@@ -33,17 +36,18 @@
     <h3>Create a new Branch:</h3>
 
     <%= form_for @new_child_branch do |f| %>
-        <%= f.fields_for :child_document, @new_child_branch.child_document.build do |document_fields| %>
+        <%= f.fields_for :child_document, @new_child_branch.child_document do |document_fields| %>
             <label>Title:</label>
             <%= document_fields.text_field :title %>
             <label>Passage:</label>
-            <%= document_fields.text_area_field :passage %>
+            <%= document_fields.text_area :passage %>
         <% end %>
 
         <%= f.submit "Create Branch" %>
     <% end %>
 
     <%= form_with(url: "/documents/#{@document.id}", method: "delete") do %>
-        <%= f.submit "Delete Document" %>
+        <%= submit_tag "Delete Document" %>
     <% end %>
+    <p>Warning! Deleting this document will also delete all of its child branches!</p>
 <% end %>

@@ -1,8 +1,15 @@
+<% if @document.errors.any? %>
+    <ul>
+        <% @document.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+        <% end %>
+    </ul>
+<% end %>
 <%= form_for @document do |f| %>
     <label>Title:</label>
     <%= f.text_field :title %>
     <label>Passage:</label>
-    <%= f.text_area_field :passage %>
+    <%= f.text_area :passage %>
 
     <label>The Narrative this document will belong to:</label>
     <%= f.collection_select :narrative, current_user.narratives.all, :id, :title %>

@@ -20,7 +20,7 @@ class Document < ApplicationRecord
     #accepts_nested_attributes_for :parent_branches
 
     def author
-        self.narrative.author
+        self.narrative.user
     end
 
     def author_name

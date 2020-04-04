@@ -2,7 +2,7 @@
 <h2>Author: <%= @narrative.author_name %></h2>
 
 <% if @user_can_edit %>
-    <p>Is <%= "not" unless @narrative.is_public %> public</p>
+    <p>Is <%= "not" unless @narrative.is_public %> Public</p>
     
     <%= link_to "Edit this Narrative", edit_narrative_path(@narrative) %>
 <% end %>
@@ -23,6 +23,8 @@
 
         <label>Passage:</label>
         <%= f.text_area :passage %>
+        <%= f.hidden_field :narrative_id, value: @narrative.id %>
+        <%= f.hidden_field :is_root, value: @true %>
 
         <%= f.submit "Create Root Document" %>
     <% end %>

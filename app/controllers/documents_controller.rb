@@ -17,7 +17,7 @@ class DocumentsController < ApplicationController
         elsif current_user.admin
             @documents = Document.all
         else
-            redirect_to user_path(current_user), alert: "You do not have access."
+            redirect_to user_path(current_user), alert: "You do not have access to the User database."
         end
     end
 
@@ -40,6 +40,7 @@ class DocumentsController < ApplicationController
     end
 
     def update
+        #binding.pry
         if @document.update(document_params)
             redirect_to document_path(@document)
         else
@@ -48,16 +49,18 @@ class DocumentsController < ApplicationController
     end
 
     def destroy
-        @document.branches.delete_all
+        prior_narrative = @document.narrative
+        @document.child_branches.destroy_all
         @document.delete
         #it is conceivable that we might want to keep documents intact even if we delete one of their parent or child documents
+        binding.pry
+        redirect_to narrative_path(prior_narrative)
     end
 
     private
 
     def find_document
-        key = params[:document_id].nil? ?  :id : :document_id
-        @document = Document.find_by(id: params[key])
+        @document = Document.find_by(id: params[:id])
     end
 
     def current_user_is_author
