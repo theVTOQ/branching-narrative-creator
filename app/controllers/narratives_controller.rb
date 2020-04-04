@@ -4,7 +4,8 @@ class NarrativesController < ApplicationController
     #skip_before_action :require_login, only: [:new, :create]
 
     def show
-        @new_root_document = Document.new(narrative_id: self.id)    
+        @new_root_document = Document.new(narrative_id: @narrative.id)    
+        @user_can_edit = current_user_is_author
     end
 
     def index
@@ -27,6 +28,7 @@ class NarrativesController < ApplicationController
 
     def create
         @narrative = Narrative.new(narrative_params)
+        @narrative.user = current_user
         if @narrative.save
             redirect_to narrative_path(@narrative)
         else
@@ -44,25 +46,28 @@ class NarrativesController < ApplicationController
     end
 
     def update
-        if @document.update(document_params)
-            redirect_to document_path(@document)
+        if @narrative.update(narrative_params)
+            redirect_to narrative_path(@narrative)
         else
             render "edit"
         end
     end
 
     def destroy
-        @document.destroy
+        @narrative.destroy
     end
 
     private
 
     def find_narrative
-        key = params[:branch_id].nil? ?  :id : :branch_id
-        @document = Document.find_by(id: params[key])
+        @narrative = Narrative.find_by(id: params[:id])
     end
 
-    def document_params
-        params.require("document").permit("title", "passage", "branches_attributes")
+    def current_user_is_author
+        current_user.id == @narrative.user.id
+    end
+
+    def narrative_params
+        params.require("narrative").permit("title", "is_public", "documents_attributes")
     end
 end

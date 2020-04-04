@@ -6,6 +6,7 @@ class DocumentsController < ApplicationController
     def show
         @new_parent_branch = Branch.new(child_document_id: @document.id)
         @new_child_branch = Branch.new(parent_document_id: @document.id)
+        @user_can_edit = current_user_is_author
     end
 
     def index
@@ -57,6 +58,10 @@ class DocumentsController < ApplicationController
     def find_document
         key = params[:document_id].nil? ?  :id : :document_id
         @document = Document.find_by(id: params[key])
+    end
+
+    def current_user_is_author
+        current_user.id == @document.narrative.user.id
     end
 
     def document_params

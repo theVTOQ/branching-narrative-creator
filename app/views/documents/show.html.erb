@@ -1,7 +1,7 @@
 <h1><%= @document.title %></h1>
 <h2>Author: <%= @document.author_name %></h2>
 
-<% if current_user_has_edit_access_to_document(@document) %>
+<% if @user_can_edit %>
     <h3>Prior Choices that Lead to this Outcome:</h3>
     <ul>
         <% @document.parent_documents.each do |parent_document| %>
@@ -29,7 +29,7 @@
     <% end %>
 </ol>
 
-<% if current_user_has_edit_access_to_document(@document) %>
+<% if @user_can_edit %>
     <h3>Create a new Branch:</h3>
 
     <%= form_for @new_child_branch do |f| %>
@@ -43,7 +43,7 @@
         <%= f.submit "Create Branch" %>
     <% end %>
 
-    <%= form_with(url: "/documents/#{@document.id}", method: "delete") %>
+    <%= form_with(url: "/documents/#{@document.id}", method: "delete") do %>
         <%= f.submit "Delete Document" %>
     <% end %>
 <% end %>

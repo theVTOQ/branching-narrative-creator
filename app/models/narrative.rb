@@ -19,6 +19,10 @@ class Narrative < ApplicationRecord
         self.documents << doc
     end
 
+    def author_name
+        self.user.name
+    end
+
     private
 
     def set_default_values
