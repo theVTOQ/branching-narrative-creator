@@ -1,6 +1,6 @@
 class DocumentTitleValidator < ActiveModel::Validator
     def validate(record)
-        binding.pry
+        #binding.pry
         existing_narrative_document_with_this_title = record.narrative.documents.find_by(title: record.title)
         unless existing_narrative_document_with_this_title.nil? || existing_narrative_document_with_this_title == record
             #binding.pry

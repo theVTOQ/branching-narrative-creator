@@ -22,6 +22,7 @@ class DocumentsController < ApplicationController
     end
 
     def create
+        binding.pry
         @document = Document.new(document_params)
         if @document.save
             redirect_to document_path(@document)
@@ -53,7 +54,7 @@ class DocumentsController < ApplicationController
         @document.child_branches.destroy_all
         @document.delete
         #it is conceivable that we might want to keep documents intact even if we delete one of their parent or child documents
-        binding.pry
+        #binding.pry
         redirect_to narrative_path(prior_narrative)
     end
 
@@ -68,6 +69,6 @@ class DocumentsController < ApplicationController
     end
 
     def document_params
-        params.require("document").permit("title", "passage", "branches_attributes", "narrative_id")
+        params.require("document").permit("title", "passage", "branches_attributes", "narrative_id", "is_root")
     end
 end

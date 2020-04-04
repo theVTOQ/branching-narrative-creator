@@ -12,16 +12,16 @@
                 <li><%= link_to parent_document.title, document_path(parent_document) %></li>
             <% end %>
         </ul>
-    <% end %>
-    
-    <h3>Associate this Outcome with an Existing Prior Choice:</h3>
 
-    <%= form_for @new_parent_branch do |f| %>
-        <%= f.fields_for :parent_document, @new_parent_branch.parent_document do |document_fields| %>
-            <%= document_fields.collection_select :parent_document, Document.eligible_parent_documents(@document), :id, :title %>
+        <h3>Associate this Outcome with an Existing Prior Choice:</h3>
+
+        <%= form_for @new_parent_branch do |f| %>
+            <%= f.fields_for :parent_document, @new_parent_branch.parent_document do |document_fields| %>
+                <%= document_fields.collection_select :parent_document, Document.eligible_parent_documents(@document), :id, :title %>
+            <% end %>
+
+            <%= f.submit "Create Branch" %>
         <% end %>
-
-        <%= f.submit "Create Branch" %>
     <% end %>
 <% end %>
 

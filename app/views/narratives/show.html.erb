@@ -24,7 +24,7 @@
         <label>Passage:</label>
         <%= f.text_area :passage %>
         <%= f.hidden_field :narrative_id, value: @narrative.id %>
-        <%= f.hidden_field :is_root, value: @true %>
+        <%= f.hidden_field :is_root, value: "true" %>
 
         <%= f.submit "Create Root Document" %>
     <% end %>
