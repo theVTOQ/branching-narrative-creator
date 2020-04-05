@@ -5,6 +5,8 @@ class Narrative < ApplicationRecord
     validates_with NarrativeTitleValidator
     before_validation :set_default_values
 
+    scope :publicized, -> { where(is_public: true) }
+
     belongs_to :user
     #belongs_to :author, class_name: "user"
     #has_one :root_document, class_name: Document #for purposes of maintaining a tree of documents, have to have a root document

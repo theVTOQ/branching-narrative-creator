@@ -20,7 +20,7 @@ class UsersController < ApplicationController
     end
 
     def show
-        binding.pry
+        #binding.pry
         if @user.nil? || current_user.id != @user.id
             #binding.pry
             return head(:forbidden) 

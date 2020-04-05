@@ -26,7 +26,7 @@ class BranchesController < ApplicationController
     private
 
     def branch_params
-        params.require("branch").permit("parent_document_id", "child_document_id", child_document_attributes: [:title, :passage, :narrative_id], parent_document_attributes: [:title, :passage, :narrative_id])
+        params.require("branch").permit("parent_document_id", "child_document_id", "notes", child_document_attributes: [:title, :passage, :narrative_id], parent_document_attributes: [:title, :passage, :narrative_id])
     end
 
     def find_branch

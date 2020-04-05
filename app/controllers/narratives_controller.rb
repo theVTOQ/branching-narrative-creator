@@ -16,7 +16,7 @@ class NarrativesController < ApplicationController
         elsif current_user.admin
             @narratives = Narrative.all
         else
-            @narratives = Narrative.all.where(is_public: true)
+            @narratives = Narrative.publicized
         end
         #binding.pry
     end

@@ -41,15 +41,15 @@ class DocumentsController < ApplicationController
 
     def new
         @document = Document.new
-        prefix = "Create"
+        @prefix = "Create"
     end
 
     def edit
-        prefix = "Update"
+        @prefix = "Update"
     end
 
     def update
-        binding.pry
+        #binding.pry
         if @document.update(document_params)
             redirect_to document_path(@document)
         else

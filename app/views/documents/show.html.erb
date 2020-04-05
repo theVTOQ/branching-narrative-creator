@@ -2,6 +2,7 @@
 <h5>Author: <%= @document.author_name %></h5>
 <h2><%= @document.title %></h2>
 <p><%= @document.passage %></p>
+<%= link_to "Edit Document", edit_document_path(@document) %>
 
 <% if @user_can_edit %>
     <% if @document.is_root %>
@@ -29,16 +30,27 @@
     <% else %>
         <h3>Prior Choices that can Lead to this Outcome:</h3>
         <ul>
-            <% @document.parent_documents.each do |parent_document| %>
-                <li><%= link_to parent_document.title, document_path(parent_document) %></li>
+            <% @document.parent_branches.each do |parent_branch| %>
+                <li>
+                    <%= link_to parent_branch.parent_document.title, document_path(parent_branch.parent_document) %>
+                    <p><%= parent_branch.notes %></p>
+                </li>
             <% end %>
         </ul>
 
         <h4>Associate this Outcome with an Existing Prior Choice:</h4>
-
+        <% if @new_parent_branch.errors.any? %>
+            <ul>
+                <% @new_parent_branch.errors.full_messages.each do |msg| %>
+                    <li><%= msg %></li>
+                <% end %>
+            </ul>
+        <% end %>
         <%= form_for @new_parent_branch do |f| %>
             <label>Select a parent document for this document:</label>
             <%= f.collection_select :parent_document_id, @document.eligible_parent_documents || [], :id, :title %>
+            <label>Add any notes that will assist with future development, but will be unavailable to readers:</label>
+            <%= f.text_field :notes %>
             <%= f.hidden_field :child_document_id, value: @document.id %>
             <%= f.submit "Create a new Parent Document (via a new parent Branch)" %>
         <% end %>
@@ -47,8 +59,13 @@
 
 <h3>Choices:</h3>
 <ol>
-    <% @document.child_documents.each do |child_document| %>
-        <li><%= link_to child_document.title, document_path(child_document) %></li>
+    <% @document.child_branches.each do |child_branch| %>
+        <% unless child_branch.child_document.nil? %>
+            <li>
+                <%= link_to child_branch.child_document.title, document_path(child_branch.child_document) %>
+                <p><%= child_branch.notes %></p>
+            </li>
+        <% end %>
     <% end %>
 </ol>
 
@@ -72,8 +89,10 @@
         <% end %>
 
         <%= f.hidden_field :parent_document_id, value: @document.id %>
-
-        <%= f.submit "Create New Child Document" %>
+        <label>Add any notes for use in development:</label>
+        <%= f.text_field :notes %></p>
+        
+        <%= f.submit "Create New Child Document (via a new Child Branch)" %>
     <% end %>
     <br>
     

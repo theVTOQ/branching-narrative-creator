@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_29_164807) do
+ActiveRecord::Schema.define(version: 2020_04_05_030051) do
 
   create_table "branches", force: :cascade do |t|
     t.integer "parent_document_id"
     t.integer "child_document_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "notes"
   end
 
   create_table "documents", force: :cascade do |t|
