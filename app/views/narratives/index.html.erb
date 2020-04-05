@@ -1,4 +1,13 @@
+<% if flash.any? %>
+    <p>Errors:</p>
+    <ul>
+        <% flash.each do |type, msg| %>
+            <li><%= msg %></li>
+        <% end %>
+    </ul>
+<% end %>
 <h1><%= @prefix %>Narratives:</h1>
+
 <ul>
     <% @narratives.each do |narrative| %>
         <li><%= link_to narrative.title, narrative_path(narrative) %></li>

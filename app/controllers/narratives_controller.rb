@@ -4,6 +4,10 @@ class NarrativesController < ApplicationController
     #skip_before_action :require_login, only: [:new, :create]
 
     def show
+        unless @narrative.is_public || @narrative.user == current_user || current_user.admin
+            redirect_to narratives_path, alert: "Access Denied."
+        end
+
         @new_root_document = Document.new(narrative_id: @narrative.id)    
         @user_can_edit = current_user_is_author
     end
@@ -18,7 +22,6 @@ class NarrativesController < ApplicationController
         else
             @narratives = Narrative.publicized
         end
-        #binding.pry
     end
 
     def documents_index
@@ -62,6 +65,9 @@ class NarrativesController < ApplicationController
 
     def find_narrative
         @narrative = Narrative.find_by(id: params[:id])
+        if @narrative.nil
+           redirect_to narratives_path, alert: "That narrative does not exist." 
+        end
     end
 
     def current_user_is_author

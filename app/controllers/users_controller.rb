@@ -8,39 +8,25 @@ class UsersController < ApplicationController
     end
 
     def create
-        binding.pry
         @user = User.new(user_params)
         if @user.save
             session[:email] = @user.email
             redirect_to user_path(@user)
         else
-            #binding.pry
             render "new"
         end
     end
 
     def show
-        #binding.pry
-        if @user.nil? || current_user.id != @user.id
-            #binding.pry
-            return head(:forbidden) 
+        if @user.nil? 
+            redirect_to "/", alert: "Access Denied."
+        elsif current_user.id != @user.id
+            redirect_to user_path(current_user), alert: "Access Denied"
         else
             @user = User.find_by(id: params[:id])
             @new_narrative = Narrative.new(user_id: @user.id)
         end
     end
-
-    #def narratives_index
-    #    @prefix = "Your "
-    #    @narratives = @user.narratives
-    #    binding.pry
-    #    render template: 'narratives/index'
-    #end
-
-    #def documents_index
-    #    @documents = @user.documents
-    #    render template: 'documents/index'
-    #end
 
     private
 
