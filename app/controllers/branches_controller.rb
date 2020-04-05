@@ -4,7 +4,7 @@ class BranchesController < ApplicationController
     
     def create
         @branch = Branch.create(branch_params)
-        binding.pry
+        #binding.pry
         redirect_to document_path(@branch.parent_document)
     end
 

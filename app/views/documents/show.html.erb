@@ -27,7 +27,7 @@
             <%= f.submit "Create Parallel Root Document" %>
         <% end %>
     <% else %>
-        <h3>Prior Choices that Lead to this Outcome:</h3>
+        <h3>Prior Choices that can Lead to this Outcome:</h3>
         <ul>
             <% @document.parent_documents.each do |parent_document| %>
                 <li><%= link_to parent_document.title, document_path(parent_document) %></li>
