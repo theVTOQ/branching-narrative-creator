@@ -33,14 +33,30 @@ class NarrativesController < ApplicationController
         @narrative = Narrative.new(narrative_params)
         @narrative.user = current_user
         if @narrative.save
-            redirect_to narrative_path(@narrative)
+            if !params[:narrative][:root_documents].nil? && @narrative.root_documents.empty?
+                advisement = "Initial Root Document could not be saved. Errors: \n"
+                initial_root_document = Document.new(params[:root_documents])
+                initial_root_document.narrative = @narrative
+                initial_root_document.save
+                initial_root_document_errors = initial_root_document.errors.full_messages
+                #initial_root_document.errors.full_messages.each do |msg|
+                #
+                #end
+                for i in 0..initial_root_document_errors.length - 1
+                    advisement << "#{i + 1}. #{initial_root_document_errors[i]} \n"
+                end
+                binding.pry
+                redirect_to new_narrative_document_path(@narrative), alert: advisement
+            else
+                redirect_to narrative_path(@narrative)
+            end
         else
             render "new"
         end
     end
 
     def new
-        @narrative = Narrative.new(user_id: current_user.id)
+        @narrative = Narrative.new
         @prefix = "Create"
     end
 
@@ -65,7 +81,7 @@ class NarrativesController < ApplicationController
 
     def find_narrative
         @narrative = Narrative.find_by(id: params[:id])
-        if @narrative.nil
+        if @narrative.nil?
            redirect_to narratives_path, alert: "That narrative does not exist." 
         end
     end

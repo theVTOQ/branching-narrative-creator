@@ -18,7 +18,6 @@
         <%= root_documents_fields.text_field :title %>
         <label>Passage:</label>
         <%= root_documents_fields.text_field :passage %>
-        <%= root_documents_fields.hidden_field :narrative_id, value: @narrative.id %>
     <% end %>
     <%= f.submit "#{@prefix} Narrative" %>
 <% end %>

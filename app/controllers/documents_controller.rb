@@ -1,12 +1,14 @@
 class DocumentsController < ApplicationController
     before_action :find_document
     skip_before_action :find_document, only: [:new, :create, :index]
+    before_action :find_narrative
+    skip_before_action :find_narrative, only: [:create, :update, :destroy]
     #skip_before_action :require_login, only: [:new, :create]
 
     def show
         if !params[:narrative_id].nil? 
             current_narrative = Narrative.find_by(id: params[:narrative_id])
-            unless current_narrative.public || current_user = current_narrative.user
+            unless current_narrative.is_public || current_user = current_narrative.user
                 redirect_to narratives_path, alert: "You do not have access to that narrative."
             end
             
@@ -40,10 +42,10 @@ class DocumentsController < ApplicationController
     end
 
     def create
-        #binding.pry
+        binding.pry
         @document = Document.new(document_params)
         if @document.save
-            redirect_to document_path(@document)
+            redirect_to narrative_document_path(@document.narrative, @document)
         else
             render "new"
         end
@@ -56,6 +58,7 @@ class DocumentsController < ApplicationController
 
     def edit
         @prefix = "Update"
+        @narrative =  Narrative.find_by(id: params[:narrative_id])
     end
 
     def update
@@ -85,8 +88,19 @@ class DocumentsController < ApplicationController
         end
     end
 
+    def find_narrative
+        key = params[:narrative_id].nil? ? :id : :narrative_id
+        @narrative = Narrative.find_by(id: params[key])
+        binding.pry
+        if @narrative.nil?
+            redirect_to "/narratives", alert:"This narrative doesn't exist."
+        elsif !current_user_has_access
+            redirect_to user_path(current_user), alert: "Access Denied."
+        end
+    end
+
     def current_user_is_author
-        current_user.id == @document.narrative.user.id
+        current_user.id == @narrative.user.id
     end
 
     def document_params
@@ -95,5 +109,9 @@ class DocumentsController < ApplicationController
 
     def document_belongs_to_current_narrative
 
+    end
+
+    def current_user_has_access
+        current_user_is_author || current_user.admin
     end
 end

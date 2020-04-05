@@ -16,6 +16,14 @@
     <% end %>
 </ul>
 
+<% if @new_narrative.errors.any? %>
+    <ul>
+        <% @new_narrative.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+        <% end %>
+    </ul>
+<% end %>
+
 <h3>Create a New Narrative:</h3>
 <%= form_for @new_narrative do |f| %>
     <label>Title:</label>

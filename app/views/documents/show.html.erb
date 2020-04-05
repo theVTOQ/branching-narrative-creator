@@ -2,7 +2,7 @@
 <h5>Author: <%= @document.author_name %></h5>
 <h2><%= @document.title %></h2>
 <p><%= @document.passage %></p>
-<%= link_to "Edit Document", edit_document_path(@document) %>
+<%= link_to "Edit Document", edit_narrative_document_path(@narrative, @document) %>
 
 <% if @user_can_edit %>
     <% if @document.is_root %>

@@ -18,12 +18,12 @@ class UsersController < ApplicationController
     end
 
     def show
-        if current_user.id != @user.id || current_user.admin == false
-            redirect_to user_path(current_user), alert: "Access Denied"
-        else
-            @user = User.find_by(id: params[:id])
-            @new_narrative = Narrative.new(user_id: @user.id)
+        if current_user.id != @user.id 
+            unless current_user.admin
+                redirect_to user_path(current_user), alert: "Access Denied"
+            end
         end
+        @new_narrative = Narrative.new
     end
 
     def index
@@ -32,6 +32,8 @@ class UsersController < ApplicationController
         elsif !current_user.admin
             redirect_to user_path(current_user), alert: "You do not have access to the User database."
         end
+
+        @users = User.all
     end
 
     private

@@ -1,2 +1,10 @@
 <h1>Create Document</h1>
+<% if flash.any? %>
+    <p>Errors:</p>
+    <ul>
+        <% flash.each do |type, msg| %>
+            <li><%= msg %></li>
+        <% end %>
+    </ul>
+<% end %>
 <%= render 'form' %>

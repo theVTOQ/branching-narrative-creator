@@ -20,6 +20,7 @@
       <%= link_to "Create a New Narrative!", new_narrative_path %>
       <% if current_user.admin %>
         <%= link_to "Browse All Documents", documents_path %>
+        <%= link_to "View Users", users_path %>
       <% end %>
     <% end %>
 
