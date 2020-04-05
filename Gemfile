@@ -42,7 +42,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'omniauth'
+  gem 'omniauth', '> 1.9.0'
   gem 'omniauth-github'
   gem 'rspec-rails'
   gem 'pry'

@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
     before_action :find_user
-    skip_before_action :find_user, only: [:new, :create]
+    skip_before_action :find_user, only: [:new, :create, :index]
     skip_before_action :require_login, only: [:new, :create]
 
     def new
@@ -18,13 +18,19 @@ class UsersController < ApplicationController
     end
 
     def show
-        if @user.nil? 
-            redirect_to "/", alert: "Access Denied."
-        elsif current_user.id != @user.id
+        if current_user.id != @user.id || current_user.admin == false
             redirect_to user_path(current_user), alert: "Access Denied"
         else
             @user = User.find_by(id: params[:id])
             @new_narrative = Narrative.new(user_id: @user.id)
+        end
+    end
+
+    def index
+        if current_user.nil?
+            redirect_to "/"
+        elsif !current_user.admin
+            redirect_to user_path(current_user), alert: "You do not have access to the User database."
         end
     end
 
@@ -35,6 +41,6 @@ class UsersController < ApplicationController
     end
 
     def find_user
-        @user = User.find_by(email: session[:email])
+        @user = User.find_by(id: params[:id])
     end
 end

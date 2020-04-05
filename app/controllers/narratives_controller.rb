@@ -1,6 +1,6 @@
 class NarrativesController < ApplicationController
     before_action :find_narrative
-    skip_before_action :find_narrative, only: [:new, :create]
+    skip_before_action :find_narrative, only: [:new, :create, :index]
     #skip_before_action :require_login, only: [:new, :create]
 
     def show

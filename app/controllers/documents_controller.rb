@@ -1,6 +1,6 @@
 class DocumentsController < ApplicationController
     before_action :find_document
-    skip_before_action :find_document, only: [:new, :create]
+    skip_before_action :find_document, only: [:new, :create, :index]
     #skip_before_action :require_login, only: [:new, :create]
 
     def show
@@ -35,7 +35,7 @@ class DocumentsController < ApplicationController
         elsif current_user.admin
             @documents = Document.all
         else
-            redirect_to user_path(current_user), alert: "You do not have access to the User database."
+            redirect_to user_path(current_user), alert: "You do not have access to the Documents database."
         end
     end
 
