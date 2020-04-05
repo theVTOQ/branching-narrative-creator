@@ -1,10 +1,31 @@
-<h1><%= @document.title %></h1>
+<h1><%= link_to @document.narrative.title, narrative_path(@document.narrative) %></h1>
 <h5>Author: <%= @document.author_name %></h5>
+<h2><%= @document.title %></h2>
 <p><%= @document.passage %></p>
 
 <% if @user_can_edit %>
     <% if @document.is_root %>
         <p>Is Root Document</p>
+        <h4>Create Parallel Root Document</h4>
+        
+        <% if @new_parallel_root_doc.errors.any? %>
+            <ul>
+                <% @new_parallel_root_doc.errors.full_messages.each do |msg| %>
+                    <li><%= msg %></li>        
+                <% end %>
+            </ul>
+        <% end %>
+        
+        <%= form_for @new_parallel_root_doc do |f| %>
+            <label>Title:</label>
+            <%= f.text_field :title %>
+            <label>Passage:</label>
+            <%= f.text_area :passage %>
+            <%= f.hidden_field :narrative_id, value: @document.narrative.id %>
+            <%= f.hidden_field :is_root, value: "true" %>
+
+            <%= f.submit "Create Parallel Root Document" %>
+        <% end %>
     <% else %>
         <h3>Prior Choices that Lead to this Outcome:</h3>
         <ul>
@@ -13,14 +34,13 @@
             <% end %>
         </ul>
 
-        <h3>Associate this Outcome with an Existing Prior Choice:</h3>
+        <h4>Associate this Outcome with an Existing Prior Choice:</h4>
 
         <%= form_for @new_parent_branch do |f| %>
-            <%= f.fields_for :parent_document, @new_parent_branch.parent_document do |document_fields| %>
-                <%= document_fields.collection_select :parent_document, Document.eligible_parent_documents(@document), :id, :title %>
-            <% end %>
-
-            <%= f.submit "Create Branch" %>
+            <label>Select a parent document for this document:</label>
+            <%= f.collection_select :parent_document_id, @document.eligible_parent_documents || [], :id, :title %>
+            <%= f.hidden_field :child_document_id, value: @document.id %>
+            <%= f.submit "Create a new Parent Document (via a new parent Branch)" %>
         <% end %>
     <% end %>
 <% end %>
@@ -40,7 +60,7 @@
             <% end %>
         </ul>
     <% end %>
-    <h3>Create a new Child Document (via a new Child Branch):</h3>
+    <h4>Create a new Child Document (via a new Child Branch):</h4>
 
     <%= form_for @new_child_branch do |f| %>
         <%= f.fields_for :child_document_attributes, @new_child_branch.child_document do |child_document_fields| %>
@@ -56,6 +76,9 @@
         <%= f.submit "Create New Child Document" %>
     <% end %>
     <br>
+    
+    <!-- TODO: allow creation of a new parent branch? -->
+
     <%= form_with(url: "/documents/#{@document.id}", method: "delete") do %>
         <%= submit_tag "Delete Document" %>
     <% end %>

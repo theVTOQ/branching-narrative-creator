@@ -4,11 +4,17 @@ class DocumentsController < ApplicationController
     #skip_before_action :require_login, only: [:new, :create]
 
     def show
-        @new_parent_branch = Branch.new(child_document_id: @document.id)
-        @new_child_branch = Branch.new(parent_document_id: @document.id)
+        @new_parent_branch = Branch.new
+        @new_parent_document = Document.new
+        @new_parent_branch.parent_document = @new_parent_document
+
+        @new_child_branch = Branch.new
         @new_child_document = Document.new
         @new_child_branch.child_document = @new_child_document
+
+        @new_parallel_root_doc = Document.new
         @user_can_edit = current_user_is_author
+        #binding.pry
     end
 
     def index

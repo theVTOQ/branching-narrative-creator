@@ -31,8 +31,10 @@ class Document < ApplicationRecord
         self.author.id
     end
 
-    def self.eligible_parent_documents(document)
-        self.all.where(narrative_id: document.narrative.id).where.not(child_document_ids: document.child_document_ids)
+    def eligible_parent_documents
+        ineligible_document_ids = self.child_documents.pluck(:id)
+        eligible_documents = self.narrative.documents.where.not(id: ineligible_document_ids)
+        #binding.pry
         #direct child documents of this document are not eligible to also be direct parents of this document
     end
 
