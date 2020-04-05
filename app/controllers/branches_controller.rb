@@ -1,13 +1,15 @@
 class BranchesController < ApplicationController
     before_action :find_branch
     skip_before_action :find_branch, only: [:new, :create]
+    
     def create
-        @branch = Branch.create(branches_params)
+        @branch = Branch.create(branch_params)
+        binding.pry
         redirect_to document_path(@branch.parent_document)
     end
 
     def update
-        if @branch.update(branches_params)
+        if @branch.update(branch_params)
             redirect_to branch_path(@branch)
         else
             render "edit"
@@ -23,8 +25,8 @@ class BranchesController < ApplicationController
 
     private
 
-    def branches_params
-        params.require("branch").permit("parent_document_id", "child_document_id")
+    def branch_params
+        params.require("branch").permit("parent_document_id", "child_document_id", child_document_attributes: [:title, :passage, :narrative_id], parent_document_attributes: [:title, :passage, :narrative_id])
     end
 
     def find_branch

@@ -1,7 +1,7 @@
 class Document < ApplicationRecord
     include ActiveModel::Validations
     validates :narrative_id, presence: true
-    validates :title, presence: true, length: { minimum: 2, maximum: 40}
+    validates :title, presence: true, length: { minimum: 2, maximum: 50}
     validates_with DocumentTitleValidator
     before_validation :set_default_values
 

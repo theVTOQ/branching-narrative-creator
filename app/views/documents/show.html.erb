@@ -33,19 +33,29 @@
 </ol>
 
 <% if @user_can_edit %>
-    <h3>Create a new Branch:</h3>
+    <% if @new_child_branch.child_document.errors.any? %>
+        <ul>
+            <% @new_child_branch.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+        </ul>
+    <% end %>
+    <h3>Create a new Child Document (via a new Child Branch):</h3>
 
     <%= form_for @new_child_branch do |f| %>
-        <%= f.fields_for :child_document, @new_child_branch.child_document do |document_fields| %>
+        <%= f.fields_for :child_document_attributes, @new_child_branch.child_document do |child_document_fields| %>
             <label>Title:</label>
-            <%= document_fields.text_field :title %>
+            <%= child_document_fields.text_field :title %>
             <label>Passage:</label>
-            <%= document_fields.text_area :passage %>
+            <%= child_document_fields.text_area :passage %>
+            <%= child_document_fields.hidden_field :narrative_id, value: @document.narrative.id %>
         <% end %>
 
-        <%= f.submit "Create Branch" %>
-    <% end %>
+        <%= f.hidden_field :parent_document_id, value: @document.id %>
 
+        <%= f.submit "Create New Child Document" %>
+    <% end %>
+    <br>
     <%= form_with(url: "/documents/#{@document.id}", method: "delete") do %>
         <%= submit_tag "Delete Document" %>
     <% end %>

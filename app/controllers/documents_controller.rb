@@ -6,6 +6,8 @@ class DocumentsController < ApplicationController
     def show
         @new_parent_branch = Branch.new(child_document_id: @document.id)
         @new_child_branch = Branch.new(parent_document_id: @document.id)
+        @new_child_document = Document.new
+        @new_child_branch.child_document = @new_child_document
         @user_can_edit = current_user_is_author
     end
 
@@ -22,7 +24,7 @@ class DocumentsController < ApplicationController
     end
 
     def create
-        binding.pry
+        #binding.pry
         @document = Document.new(document_params)
         if @document.save
             redirect_to document_path(@document)
@@ -41,7 +43,7 @@ class DocumentsController < ApplicationController
     end
 
     def update
-        #binding.pry
+        binding.pry
         if @document.update(document_params)
             redirect_to document_path(@document)
         else
@@ -69,6 +71,6 @@ class DocumentsController < ApplicationController
     end
 
     def document_params
-        params.require("document").permit("title", "passage", "branches_attributes", "narrative_id", "is_root")
+        params.require("document").permit("title", "passage", "branches_attributes", "narrative_id", "is_root", "child_document_attributes")
     end
 end
