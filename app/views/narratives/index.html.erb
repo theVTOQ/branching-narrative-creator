@@ -1,11 +1,3 @@
-<% if flash.any? %>
-    <p>Errors:</p>
-    <ul>
-        <% flash.each do |type, msg| %>
-            <li><%= msg %></li>
-        <% end %>
-    </ul>
-<% end %>
 <h1><%= @prefix %>Narratives:</h1>
 
 <ul>
@@ -14,7 +6,7 @@
     <% end %>
 </ul>
 
-<% if current_user.admin %>
+<% if !@personal_viewing %>
     <h1>Private Narratives:</h1>
     <ul>
         <% @private_narratives.each do |narrative| %>

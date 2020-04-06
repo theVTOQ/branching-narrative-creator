@@ -28,8 +28,19 @@
     <% end %>
     
     <br>
-    <%= yield %>
 
+    <% if flash.any? %>
+        <p>Errors:</p>
+        <ul>
+            <% flash.each do |type, msg| %>
+                <li><%= msg %></li>
+            <% end %>
+        </ul>
+    <% end %>
+    <br>
+
+    <%= yield %>
+    <br>
     <% if logged_in %>
       <%= link_to "Sign Out", signout_path, method: :delete %>
     <% end %> 

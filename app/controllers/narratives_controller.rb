@@ -14,13 +14,32 @@ class NarrativesController < ApplicationController
 
     def index
         @prefix = "Public "
-        if params[:user_id] 
-            @narratives = current_user.narratives
-            @prefix = "Your "
+        @personal_viewing = false
+        @private_narratives = []
+        if params[:user_id]
+            @personal_viewing = true
+            user_identified = User.find_by(id: params[:user_id])
+            if user_identified.nil?
+                #logged-in user has requested to see the narratives created by
+                #a user that doesn't exist
+                redirect_to user_path(current_user), alert: "Access Denied"
+            elsif current_user.id == params[:user_id]
+                #the logged-in user is viewing own narratives
+                @narratives = current_user.narratives
+                @prefix = "Your "
+            elsif current_user.admin
+                #the logged-in user is viewing another user's narratives
+                @narratives = user_identified.narratives
+                @prefix = "#{user_identified.email}'s "
+            end
+            #binding.pry
         elsif current_user.admin
+            #the logged-in user is an admin viewing all documents, private and public
             @narratives = Narrative.publicized
             @private_narratives = Narrative.privatized
         else
+            #the logged-in user is not admin and is not viewing their own narratives,
+            #so only show public narratives
             @narratives = Narrative.publicized
         end
     end
