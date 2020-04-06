@@ -18,29 +18,28 @@ class UsersController < ApplicationController
     end
 
     def show
-        if found_user_is_logged_in 
-            unless current_user.admin
-                redirect_to user_path(current_user), alert: "Access Denied"
-            end
-        end
+        #if found_user_is_logged_in 
+        #    unless current_user.admin
+        #        redirect_to user_path(current_user), alert: "Access Denied"
+        #    end
+        #end
         @new_narrative = Narrative.new
     end
 
     def index
-        if current_user.nil?
-            redirect_to "/"
-        elsif !current_user.admin
+        #require admin access to see a list of all users
+        unless current_user.admin
             redirect_to user_path(current_user), alert: "You do not have access to the User database."
         end
 
         @users = User.all
     end
 
-    def found_user_is_logged_in
-        @user.id == current_user.id
+    def destroy
+        session.clear if found_user_is_logged_in
+        @user.destroy
+        redirect_to "/"
     end
-
-    helper_method :found_user_is_logged_in
 
     private
 
@@ -50,5 +49,16 @@ class UsersController < ApplicationController
 
     def find_user
         @user = User.find_by(id: params[:id])
+        if @user.nil?
+            redirect_to user_path(current_user), alert: "Access Denied."
+        elsif !current_user.admin
+            redirect_to user_path(current_user), alert: "You do not have access to the User database."
+        end
     end
+
+    def found_user_is_logged_in
+        @user.id == current_user.id
+    end
+
+    helper_method :found_user_is_logged_in
 end

@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   post '/signin', to: 'sessions#create'
   delete '/signout' => 'sessions#destroy'
 
-  resources :users, only: [:show, :create, :new, :index] do
+  resources :users, only: [:show, :create, :new, :index, :destroy] do
     resources :documents, only: [:index]
     resources :narratives, only: [:index, :show]
   end

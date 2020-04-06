@@ -4,8 +4,11 @@
     <p>You Have Admin Access</p>
 <% end %>
 
-<% flash.each do |type, msg| %>
-    <%= msg %>
+<% if flash.any? %>
+    <p>Errors:</p>
+    <% flash.each do |type, msg| %>
+        <%= msg %>
+    <% end %>
 <% end %>
 <br>
 
@@ -15,7 +18,7 @@
         <li><%= link_to narrative.title, narrative_path(narrative) %></li>
     <% end %>
 </ul>
-
+<br>
 <% if found_user_is_logged_in %>
     <% if @new_narrative.errors.any? %>
         <ul>
@@ -34,3 +37,8 @@
     <% end %>
     <br>
 <% end %>
+<br>
+<%= form_for @user, method: "delete" do %>
+    <%= submit_tag "Delete Account" %>
+<% end %>
+<br>
