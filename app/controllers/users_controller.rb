@@ -18,7 +18,7 @@ class UsersController < ApplicationController
     end
 
     def show
-        if current_user.id != @user.id 
+        if found_user_is_logged_in 
             unless current_user.admin
                 redirect_to user_path(current_user), alert: "Access Denied"
             end
@@ -35,6 +35,12 @@ class UsersController < ApplicationController
 
         @users = User.all
     end
+
+    def found_user_is_logged_in
+        @user.id == current_user.id
+    end
+
+    helper_method :found_user_is_logged_in
 
     private
 

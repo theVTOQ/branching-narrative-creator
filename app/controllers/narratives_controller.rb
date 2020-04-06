@@ -13,12 +13,13 @@ class NarrativesController < ApplicationController
     end
 
     def index
-        @prefix = ""
+        @prefix = "Public "
         if params[:user_id] 
             @narratives = current_user.narratives
             @prefix = "Your "
         elsif current_user.admin
-            @narratives = Narrative.all
+            @narratives = Narrative.publicized
+            @private_narratives = Narrative.privatized
         else
             @narratives = Narrative.publicized
         end

@@ -14,16 +14,20 @@
     <p>The goal: make creating branched narratives simple.</p>
     
     <% if logged_in %>
-      <%= link_to "My Profile", user_path(current_user) %>
+      Signed in as <%= link_to current_user.email, user_path(current_user) %>
       <%= link_to "Browse Narratives", narratives_path %>
       <%= link_to "View my Narratives", user_narratives_path(current_user) %>
       <%= link_to "Create a New Narrative!", new_narrative_path %>
       <% if current_user.admin %>
-        <%= link_to "Browse All Documents", documents_path %>
-        <%= link_to "View Users", users_path %>
-      <% end %>
+        <p>You have admin access:</p>
+        <ul>
+          <li><%= link_to "Browse All Narratives", narratives_path %></li>
+          <li><%= link_to "Browse All Documents", documents_path %></li>
+          <li><%= link_to "View Users", users_path %></li>
+        <% end %>
     <% end %>
-
+    
+    <br>
     <%= yield %>
 
     <% if logged_in %>

@@ -13,3 +13,12 @@
         <li><%= link_to narrative.title, narrative_path(narrative) %></li>
     <% end %>
 </ul>
+
+<% if current_user.admin %>
+    <h1>Private Narratives:</h1>
+    <ul>
+        <% @private_narratives.each do |narrative| %>
+            <li><%= link_to narrative.title, narrative_path(narrative) %></li>
+        <% end %>
+    </ul>
+<% end %>

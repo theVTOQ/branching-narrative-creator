@@ -6,6 +6,7 @@ class Narrative < ApplicationRecord
     before_validation :set_default_values
 
     scope :publicized, -> { where(is_public: true) }
+    scope :privatized, -> { where(is_public: false) }
 
     belongs_to :user
     #belongs_to :author, class_name: "user"

@@ -2,7 +2,7 @@ class DocumentsController < ApplicationController
     before_action :find_document
     skip_before_action :find_document, only: [:new, :create, :index]
     before_action :find_narrative
-    skip_before_action :find_narrative, only: [:create, :update, :destroy]
+    skip_before_action :find_narrative, only: [:index]
     #skip_before_action :require_login, only: [:new, :create]
 
     def show
@@ -42,7 +42,6 @@ class DocumentsController < ApplicationController
     end
 
     def create
-        binding.pry
         @document = Document.new(document_params)
         if @document.save
             redirect_to narrative_document_path(@document.narrative, @document)
@@ -64,7 +63,7 @@ class DocumentsController < ApplicationController
     def update
         #binding.pry
         if @document.update(document_params)
-            redirect_to document_path(@document)
+            redirect_to narrative_document_path(@document.narrative, @document)
         else
             render "edit"
         end
@@ -89,14 +88,18 @@ class DocumentsController < ApplicationController
     end
 
     def find_narrative
-        key = params[:narrative_id].nil? ? :id : :narrative_id
-        @narrative = Narrative.find_by(id: params[key])
-        binding.pry
+        if !params[:narrative_id].nil?
+            @narrative = Narrative.find_by(id: params[:narrative_id])
+        else
+            @narrative = Narrative.find_by(id: params[:document][:narrative_id])
+        end
+        
         if @narrative.nil?
             redirect_to "/narratives", alert:"This narrative doesn't exist."
         elsif !current_user_has_access
             redirect_to user_path(current_user), alert: "Access Denied."
         end
+        binding.pry
     end
 
     def current_user_is_author
