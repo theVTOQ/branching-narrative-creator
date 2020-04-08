@@ -24,6 +24,10 @@ class ApplicationController < ActionController::Base
         end
     end
 
+    def deny_access(path: user_path(current_user), alert: "Access Denied")
+        redirect_to path, alert: alert
+    end
+
     #def form_submit_message_prefix(is_new)
     #    is_new ? "Create" : "Update"
     #end

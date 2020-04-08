@@ -31,13 +31,33 @@ class DocumentsController < ApplicationController
 
     def index
         @prefix = ""
-        if params[:user_id] 
-            @documents = current_user.documents
-            @prefix = "Your "
+        @suffix = ""
+        if params[:narrative_id]
+            narrative_identified = Narrative.find_by(id: params[:narrative_id])
+            if narrative_identified.nil?
+                #logged-in user has requested to see the documents of a narrative that doesn't exist
+                deny_access
+            else
+                @suffix = " in #{narrative_identified.title}"
+                @documents = narrative_identified.documents
+                if current_user.id == narrative_identified.user.id
+                    #the logged-in user is viewing the documents of own narrative
+                    @prefix = "Your "
+                elsif current_user.admin
+                    #the logged-in user is viewing another user's narratives
+                    @prefix = "#{narrative_identified.user.email}'s "
+                else
+                    #a logged-in non-admin user is attempting to view the documents of a narrative
+                    #that this user did not create
+                    deny_access
+                end
+            end
         elsif current_user.admin
+            #the logged-in user is an admin viewing all documents, private and public
             @documents = Document.all
         else
-            redirect_to user_path(current_user), alert: "You do not have access to the Documents database."
+            #the logged-in user is not admin and is attempting to view all documents
+            deny_access(alert: "You do not have access to the Documents database.")
         end
     end
 

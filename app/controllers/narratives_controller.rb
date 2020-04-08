@@ -5,7 +5,7 @@ class NarrativesController < ApplicationController
 
     def show
         unless @narrative.is_public || @narrative.user == current_user || current_user.admin
-            redirect_to narratives_path, alert: "Access Denied."
+            deny_access(path: narratives_path)
         end
 
         @new_root_document = Document.new(narrative_id: @narrative.id)    
@@ -22,7 +22,7 @@ class NarrativesController < ApplicationController
             if user_identified.nil?
                 #logged-in user has requested to see the narratives created by
                 #a user that doesn't exist
-                redirect_to user_path(current_user), alert: "Access Denied"
+                deny_access
             elsif current_user.id == params[:user_id]
                 #the logged-in user is viewing own narratives
                 @narratives = current_user.narratives
@@ -31,6 +31,9 @@ class NarrativesController < ApplicationController
                 #the logged-in user is viewing another user's narratives
                 @narratives = user_identified.narratives
                 @prefix = "#{user_identified.email}'s "
+            else
+                #a logged-in non-admin user is attempting to view the narratives of another user
+                deny_access
             end
             #binding.pry
         elsif current_user.admin

@@ -1,13 +1,5 @@
 <h1><%= @narrative.title %></h1>
 <h2>Author: <%= @narrative.author_name %></h2>
-<% if flash.any? %>
-    <p>Errors:</p>
-    <ul>
-        <% flash.each do |type, msg| %>
-            <li><%= msg %></li>
-        <% end %>
-    </ul>
-<% end %>
 
 <% if @user_can_edit %>
     <p>Is <%= "not" unless @narrative.is_public %> Public</p>

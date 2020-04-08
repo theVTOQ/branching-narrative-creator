@@ -4,14 +4,6 @@
     <p>You Have Admin Access</p>
 <% end %>
 
-<% if flash.any? %>
-    <p>Errors:</p>
-    <% flash.each do |type, msg| %>
-        <%= msg %>
-    <% end %>
-<% end %>
-<br>
-
 <h4><%= link_to "Your Narratives:", user_narratives_path(@user) %></h4>
 <ul>
     <% @user.narratives.each do |narrative| %>
