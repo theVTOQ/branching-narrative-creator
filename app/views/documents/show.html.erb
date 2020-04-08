@@ -69,7 +69,7 @@
     <% end %>
 </ol>
 
-<% if @user_can_edit %>
+<% if current_user_is_author %>
     <% if @new_child_branch.child_document.errors.any? %>
         <ul>
             <% @new_child_branch.errors.full_messages.each do |msg| %>
@@ -97,8 +97,8 @@
     <br>
     
     <!-- TODO: allow creation of a new parent branch? -->
-
-    <%= form_with(url: "/documents/#{@document.id}", method: "delete") do %>
+<% elsif current_user_has_access %>
+    <%= form_tag narrative_document_path(@narrative, @document), method: "delete" do %>
         <%= submit_tag "Delete Document" %>
     <% end %>
     <p>Warning! Deleting this document will also delete all of its child branches!</p>

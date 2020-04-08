@@ -14,10 +14,10 @@ Rails.application.routes.draw do
   end
 
   #resources :documents, only: [:index, :create, :update, :destroy]
-  resources :documents, only: [:index, :create, :update, :destroy]
+  resources :documents, only: [:index, :create, :update]
   
   resources :narratives do
-    resources :documents, only: [:index, :show, :new, :edit, :new]
+    resources :documents, only: [:index, :show, :new, :edit, :new, :destroy]
   end
 
   resources :branches, only: [:show, :create, :update, :edit, :destroy]

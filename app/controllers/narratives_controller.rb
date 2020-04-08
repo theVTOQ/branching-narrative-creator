@@ -9,7 +9,6 @@ class NarrativesController < ApplicationController
         end
 
         @new_root_document = Document.new(narrative_id: @narrative.id)    
-        @user_can_edit = current_user_is_author
     end
 
     def index
@@ -98,6 +97,7 @@ class NarrativesController < ApplicationController
 
     def destroy
         @narrative.destroy
+        redirect_to user_path(current_user)
     end
 
     private
@@ -106,6 +106,8 @@ class NarrativesController < ApplicationController
         @narrative = Narrative.find_by(id: params[:id])
         if @narrative.nil?
            redirect_to narratives_path, alert: "That narrative does not exist." 
+        elsif !current_user_has_access
+            redirect_to user_path(current_user), alert: "Access Denied."
         end
     end
 
@@ -113,6 +115,14 @@ class NarrativesController < ApplicationController
         current_user.id == @narrative.user.id
     end
 
+    helper_method :current_user_is_author
+
+    def current_user_has_access
+        current_user_is_author || current_user.admin
+    end
+
+    helper_method :current_user_has_access
+    
     def narrative_params
         params.require("narrative").permit("title", "is_public", documents_attributes: [:title, :passage, :is_root])
     end

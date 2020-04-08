@@ -15,7 +15,7 @@
     <% end %>
 </ul>
 
-<% if @user_can_edit %>
+<% if current_user_is_author %>
     <h3>Create New Root Document</h3>
     <%= form_for @new_root_document do |f| %>
         <label>Title:</label>
@@ -28,8 +28,8 @@
         
         <%= f.submit "Create Root Document" %>
     <% end %>
-
-    <%= form_tag(url: "/narratives/#{@narrative.id}", method: "delete") do %>
+<% elsif current_user_has_access %>
+    <%= form_tag narrative_path(@narrative), method: "delete" do %>
         <%= submit_tag "Delete Narrative" %>
     <% end %>
 <% end %>

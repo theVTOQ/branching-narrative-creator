@@ -4,7 +4,6 @@ class BranchesController < ApplicationController
     
     def create
         @branch = Branch.create(branch_params)
-        binding.pry
         redirect_to narrative_document_path(@branch.narrative, @branch.parent_document)
     end
 

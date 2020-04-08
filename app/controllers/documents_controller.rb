@@ -111,6 +111,7 @@ class DocumentsController < ApplicationController
         if !params[:narrative_id].nil?
             @narrative = Narrative.find_by(id: params[:narrative_id])
         else
+            binding.pry
             @narrative = Narrative.find_by(id: params[:document][:narrative_id])
         end
         
@@ -125,15 +126,15 @@ class DocumentsController < ApplicationController
         current_user.id == @narrative.user.id
     end
 
+    helper_method :current_user_is_author
+
     def document_params
         params.require("document").permit("title", "passage", "branches_attributes", "narrative_id", "is_root", "child_document_attributes")
-    end
-
-    def document_belongs_to_current_narrative
-
     end
 
     def current_user_has_access
         current_user_is_author || current_user.admin
     end
+
+    helper_method :current_user_has_access
 end
