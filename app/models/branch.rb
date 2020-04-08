@@ -9,4 +9,8 @@ class Branch < ApplicationRecord
     def parent_document_attributes=(attrs)
         self.parent_document = Document.find_or_create_by(attrs)
     end
+
+    def narrative
+        self.parent_document.narrative
+    end
 end

@@ -88,7 +88,7 @@ class NarrativesController < ApplicationController
     end
 
     def update
-        if @narrative.update!(narrative_params)
+        if @narrative.update(narrative_params)
             binding.pry
             redirect_to narrative_path(@narrative)
         else
@@ -114,6 +114,6 @@ class NarrativesController < ApplicationController
     end
 
     def narrative_params
-        params.require("narrative").permit("title", "is_public", "documents_attributes")
+        params.require("narrative").permit("title", "is_public", documents_attributes: [:title, :passage, :is_root])
     end
 end

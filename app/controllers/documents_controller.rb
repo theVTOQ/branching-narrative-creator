@@ -119,7 +119,6 @@ class DocumentsController < ApplicationController
         elsif !current_user_has_access
             redirect_to user_path(current_user), alert: "Access Denied."
         end
-        binding.pry
     end
 
     def current_user_is_author

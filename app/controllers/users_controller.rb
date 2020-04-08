@@ -50,9 +50,16 @@ class UsersController < ApplicationController
     def find_user
         @user = User.find_by(id: params[:id])
         if @user.nil?
+            #user not found
             redirect_to user_path(current_user), alert: "Access Denied."
-        elsif !current_user.admin
-            redirect_to user_path(current_user), alert: "You do not have access to the User database."
+        end
+
+        unless found_user_is_logged_in
+            #found user is not logged in
+            unless current_user.admin
+                #unless the logged-in user is an admin, redirect with an error
+                redirect_to user_path(current_user), alert: "You do not have access to the User database."
+            end
         end
     end
 

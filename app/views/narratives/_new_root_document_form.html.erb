@@ -1,0 +1,16 @@
+<h3>Create New Root Document</h3>
+<%= form_for @new_root_document do |f| %>
+    <label>Title:</label>
+    <%= f.text_field :title %>
+
+    <label>Passage:</label>
+    <%= f.text_area :passage %>
+    <%= f.hidden_field :is_root, value: "true" %>
+    <%= f.hidden_field :narrative_id, value: @narrative.id %>
+    
+    <%= f.submit "Create Root Document" %>
+<% end %>
+
+<%= form_tag(url: "/narratives/#{@narrative.id}", method: "delete") do %>
+    <%= submit_tag "Delete Narrative" %>
+<% end %>

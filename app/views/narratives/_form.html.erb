@@ -13,11 +13,12 @@
     <%= f.check_box :is_public %>
 
     <h3>Create a New Root Document for this Narrative:</h3>
-    <%= f.fields_for :root_documents, @narrative.root_documents.build do |root_documents_fields| %>
+    <%= f.fields_for :documents, @narrative.documents.build do |root_documents_fields| %>
         <label>Title:</label>
         <%= root_documents_fields.text_field :title %>
         <label>Passage:</label>
         <%= root_documents_fields.text_field :passage %>
+        <%= root_documents_fields.hidden_field :is_root, value: "true" %>
     <% end %>
     <%= f.submit "#{@prefix} Narrative" %>
 <% end %>

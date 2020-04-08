@@ -32,7 +32,7 @@
         <ul>
             <% @document.parent_branches.each do |parent_branch| %>
                 <li>
-                    <%= link_to parent_branch.parent_document.title, document_path(parent_branch.parent_document) %>
+                    <%= link_to parent_branch.parent_document.title, narrative_document_path(@narrative, parent_branch.parent_document) %>
                     <p><%= parent_branch.notes %></p>
                 </li>
             <% end %>
@@ -62,7 +62,7 @@
     <% @document.child_branches.each do |child_branch| %>
         <% unless child_branch.child_document.nil? %>
             <li>
-                <%= link_to child_branch.child_document.title, document_path(child_branch.child_document) %>
+                <%= link_to child_branch.child_document.title, narrative_document_path(@narrative, child_branch.child_document) %>
                 <p><%= child_branch.notes %></p>
             </li>
         <% end %>

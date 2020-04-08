@@ -11,7 +11,7 @@
 <h3>Root Documents:</h3>
 <ul>
     <% @narrative.root_documents.each do |root_doc| %>
-        <li><%= link_to root_doc.title, document_path(root_doc) %></li>
+        <li><%= link_to root_doc.title, narrative_document_path(@narrative, root_doc) %></li>
     <% end %>
 </ul>
 
