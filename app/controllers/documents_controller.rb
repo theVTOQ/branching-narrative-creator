@@ -111,7 +111,6 @@ class DocumentsController < ApplicationController
         if !params[:narrative_id].nil?
             @narrative = Narrative.find_by(id: params[:narrative_id])
         else
-            binding.pry
             @narrative = Narrative.find_by(id: params[:document][:narrative_id])
         end
         

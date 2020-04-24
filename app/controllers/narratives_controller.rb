@@ -34,7 +34,6 @@ class NarrativesController < ApplicationController
                 #a logged-in non-admin user is attempting to view the narratives of another user
                 deny_access
             end
-            #binding.pry
         elsif current_user.admin
             #the logged-in user is an admin viewing all documents, private and public
             @narratives = Narrative.publicized
@@ -86,9 +85,23 @@ class NarrativesController < ApplicationController
     end
 
     def update
-        if @narrative.update(narrative_params)
-            binding.pry
-            redirect_to narrative_path(@narrative)
+        narrative_only_params = narrative_params.except(:documents_attributes)
+        initial_root_document_params = narrative_params[:documents_attributes]['0']
+        if @narrative.update(narrative_only_params)
+            initial_root_document = Document.new(initial_root_document_params)
+            initial_root_document.narrative = @narrative
+            #if params[:narrative][:root_documents].nil? && @narrative.root_documents.empty?
+            if !initial_root_document.save
+                advisement = "Initial Root Document could not be saved. Errors: \n"
+                initial_root_document_errors = initial_root_document.errors.full_messages
+        
+                for i in 0..initial_root_document_errors.length - 1
+                    advisement << "#{i + 1}. #{initial_root_document_errors[i]} \n"
+                end
+                redirect_to new_narrative_document_path(@narrative), alert: advisement
+            else
+                redirect_to narrative_path(@narrative)
+            end
         else
             render "edit"
         end
