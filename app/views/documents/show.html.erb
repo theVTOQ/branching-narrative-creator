@@ -4,9 +4,16 @@
 <p><%= @document.passage %></p>
 <%= link_to "Edit Document", edit_narrative_document_path(@narrative, @document) %>
 
-<% if @user_can_edit %>
+<% if current_user_is_author %>
     <% if @document.is_root %>
         <p>Is Root Document</p>
+        <h4>Parallel Root Documents:</h4>
+        <ul>
+            <% @document.parallel_root_documents.each do |parallel_doc| %>
+                <li><%= link_to parallel_doc.title, narrative_document_path(@narrative, parallel_doc) %></li>
+            <% end %>
+        </ul>
+        <br>
         <h4>Create Parallel Root Document</h4>
         
         <% if @new_parallel_root_doc.errors.any? %>

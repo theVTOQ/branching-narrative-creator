@@ -26,7 +26,6 @@ class DocumentsController < ApplicationController
         @new_child_branch.child_document = @new_child_document
 
         @new_parallel_root_doc = Document.new
-        @user_can_edit = current_user_is_author
     end
 
     def index

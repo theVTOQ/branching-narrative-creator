@@ -34,8 +34,15 @@ class Document < ApplicationRecord
     def eligible_parent_documents
         ineligible_document_ids = self.child_documents.pluck(:id)
         eligible_documents = self.narrative.documents.where.not(id: ineligible_document_ids)
-        #binding.pry
         #direct child documents of this document are not eligible to also be direct parents of this document
+    end
+
+    def parallel_root_documents
+        if self.is_root
+            self.narrative.root_documents.where.not(id: self.id)
+        else
+            "This document is not a Root Document."
+        end
     end
 
     private
@@ -45,7 +52,6 @@ class Document < ApplicationRecord
     end
 
     def branches_attributes=(branch_attrs)
-        binding.pry
         branch = Branch.create(branch_attrs)
         #if branch.save
 
