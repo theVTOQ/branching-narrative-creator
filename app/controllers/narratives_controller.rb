@@ -22,7 +22,7 @@ class NarrativesController < ApplicationController
                 #logged-in user has requested to see the narratives created by
                 #a user that doesn't exist
                 deny_access
-            elsif current_user.id == params[:user_id]
+            elsif current_user.id == params[:user_id].to_i
                 #the logged-in user is viewing own narratives
                 @narratives = current_user.narratives
                 @prefix = "Your "
@@ -52,22 +52,21 @@ class NarrativesController < ApplicationController
     end
 
     def create
-        @narrative = Narrative.new(narrative_params)
+        narrative_only_params = narrative_params.except(:documents_attributes)
+        initial_root_document_params = narrative_params[:documents_attributes]['0']
+        @narrative = Narrative.new(narrative_only_params)
         @narrative.user = current_user
         if @narrative.save
-            if !params[:narrative][:root_documents].nil? && @narrative.root_documents.empty?
+            initial_root_document = Document.new(initial_root_document_params)
+            initial_root_document.narrative = @narrative
+            #if params[:narrative][:root_documents].nil? && @narrative.root_documents.empty?
+            if !initial_root_document.save
                 advisement = "Initial Root Document could not be saved. Errors: \n"
-                initial_root_document = Document.new(params[:root_documents])
-                initial_root_document.narrative = @narrative
-                initial_root_document.save
                 initial_root_document_errors = initial_root_document.errors.full_messages
-                #initial_root_document.errors.full_messages.each do |msg|
-                #
-                #end
+        
                 for i in 0..initial_root_document_errors.length - 1
                     advisement << "#{i + 1}. #{initial_root_document_errors[i]} \n"
                 end
-                binding.pry
                 redirect_to new_narrative_document_path(@narrative), alert: advisement
             else
                 redirect_to narrative_path(@narrative)

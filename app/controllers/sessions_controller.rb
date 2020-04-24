@@ -10,20 +10,18 @@ class SessionsController < ApplicationController
   def create
     #binding.pry
     if params[:email].nil?
-      # After entering a name and email value in the /auth/developer
-      # path and submitting the form, you will see a pretty-print of
-      # the authentication data object that comes from the "developer"
-      # strategy. In production, we'll swap this strategy for something
-      # like 'github' or 'facebook' or some other authentication broker
-      pp request.env['omniauth.auth']
-
-      # We're going to save the authentication information in the session
-      # for demonstration purposes. We want to keep this data somewhere so that,
-      # after redirect, we have access to the returned data
-      session[:email] = request.env['omniauth.auth']['info']['email']
-      session[:omniauth_data] = request.env['omniauth.auth']
-
-      # Ye olde redirect
+      #omniauth Github strategy:
+      omniauth_data = request.env['omniauth.auth']
+      name = omniauth_data[:info][:name]
+      email = omniauth_data[:info][:email]
+      user = User.find_by(uid: omniauth_data[:uid])
+      if user.nil?
+        user = User.new
+        user.apply_omniauth(omniauth_data)
+        user.save
+      end
+      session[:user_id] = user.id
+      session[:omniauth_data] = omniauth_data
       redirect_to root_path
     else
       user = User.find_by(email: params[:email])

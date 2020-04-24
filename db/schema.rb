@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_05_030051) do
+ActiveRecord::Schema.define(version: 2020_04_19_160134) do
 
   create_table "branches", force: :cascade do |t|
     t.integer "parent_document_id"
@@ -30,6 +30,15 @@ ActiveRecord::Schema.define(version: 2020_04_05_030051) do
     t.index ["narrative_id"], name: "index_documents_on_narrative_id"
   end
 
+  create_table "identities", force: :cascade do |t|
+    t.string "provider"
+    t.string "uid"
+    t.integer "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_identities_on_user_id"
+  end
+
   create_table "narratives", force: :cascade do |t|
     t.string "title"
     t.integer "user_id"
@@ -43,6 +52,7 @@ ActiveRecord::Schema.define(version: 2020_04_05_030051) do
     t.string "name"
     t.string "password_digest"
     t.string "email"
+    t.string "uid"
     t.boolean "admin"
   end
 
