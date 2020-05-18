@@ -52,24 +52,28 @@ class NarrativesController < ApplicationController
 
     def create
         narrative_only_params = narrative_params.except(:documents_attributes)
-        initial_root_document_params = narrative_params[:documents_attributes]['0']
         @narrative = Narrative.new(narrative_only_params)
         @narrative.user = current_user
         if @narrative.save
-            initial_root_document = Document.new(initial_root_document_params)
-            initial_root_document.narrative = @narrative
-            #if params[:narrative][:root_documents].nil? && @narrative.root_documents.empty?
-            if !initial_root_document.save
-                advisement = "Initial Root Document could not be saved. Errors: \n"
-                initial_root_document_errors = initial_root_document.errors.full_messages
-        
-                for i in 0..initial_root_document_errors.length - 1
-                    advisement << "#{i + 1}. #{initial_root_document_errors[i]} \n"
+            document_attrs = narrative_params[:documents_attributes]
+            unless document_attrs.nil?
+                initial_root_document_params = document_attrs['0']
+                initial_root_document = Document.new(initial_root_document_params)
+                initial_root_document.narrative = @narrative
+                #if params[:narrative][:root_documents].nil? && @narrative.root_documents.empty?
+                if !initial_root_document.save
+                    advisement = "Initial Root Document could not be saved. Errors: \n"
+                    initial_root_document_errors = initial_root_document.errors.full_messages
+            
+                    for i in 0..initial_root_document_errors.length - 1
+                        advisement << "#{i + 1}. #{initial_root_document_errors[i]} \n"
+                    end
+                    redirect_to new_narrative_document_path(@narrative), alert: advisement
+                else
+                    redirect_to narrative_path(@narrative)
                 end
-                redirect_to new_narrative_document_path(@narrative), alert: advisement
-            else
-                redirect_to narrative_path(@narrative)
             end
+            redirect_to narrative_path(@narrative)
         else
             render "new"
         end
@@ -77,11 +81,9 @@ class NarrativesController < ApplicationController
 
     def new
         @narrative = Narrative.new
-        @prefix = "Create"
     end
 
     def edit
-        @prefix = "Update"
     end
 
     def update
