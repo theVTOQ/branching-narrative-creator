@@ -19,5 +19,6 @@
         <%= root_documents_fields.text_field :passage %>
         <%= root_documents_fields.hidden_field :is_root, value: "true" %>
     <% end %>
-    <%= f.submit "#{!current_page?(action: "edit") ? "Create" : "Update"} Narrative" %>
+    <% @prefix ||= "Create" %>
+    <%= f.submit "#{@prefix} Narrative" %>
 <% end %>

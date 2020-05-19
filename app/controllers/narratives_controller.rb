@@ -56,7 +56,7 @@ class NarrativesController < ApplicationController
         @narrative.user = current_user
         if @narrative.save
             document_attrs = narrative_params[:documents_attributes]
-            unless document_attrs.nil?
+            if !document_attrs.nil?
                 initial_root_document_params = document_attrs['0']
                 initial_root_document = Document.new(initial_root_document_params)
                 initial_root_document.narrative = @narrative
@@ -72,8 +72,9 @@ class NarrativesController < ApplicationController
                 else
                     redirect_to narrative_path(@narrative)
                 end
+            else
+                redirect_to narrative_path(@narrative)
             end
-            redirect_to narrative_path(@narrative)
         else
             render "new"
         end
@@ -81,9 +82,11 @@ class NarrativesController < ApplicationController
 
     def new
         @narrative = Narrative.new
+        @prefix = "Create"
     end
 
     def edit
+        @prefix = "Update"
     end
 
     def update

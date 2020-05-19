@@ -28,7 +28,9 @@
         
         <%= f.submit "Create Root Document" %>
     <% end %>
-<% elsif current_user_has_access %>
+<% end %>
+
+<% if current_user_has_access %>
     <%= form_tag narrative_path(@narrative), method: "delete" do %>
         <%= submit_tag "Delete Narrative" %>
     <% end %>
