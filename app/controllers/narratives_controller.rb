@@ -15,6 +15,7 @@ class NarrativesController < ApplicationController
         @prefix = "Public "
         @personal_viewing = false
         @private_narratives = []
+        @narratives_with_long_titles = Narrative.long_titles
         if params[:user_id]
             @personal_viewing = true
             user_identified = User.find_by(id: params[:user_id])

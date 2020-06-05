@@ -7,6 +7,7 @@ class Narrative < ApplicationRecord
 
     scope :publicized, -> { where(is_public: true) }
     scope :privatized, -> { where(is_public: false) }
+    scope :long_titles, -> { where("LENGTH(title) > 15") }
 
     belongs_to :user
     #belongs_to :author, class_name: "user"
@@ -31,6 +32,14 @@ class Narrative < ApplicationRecord
     #end
 
     private
+
+    # def record_with_longest_title
+    #     longest_title = nil
+    #     Narrative.all.each do |narrative|
+
+    #     end
+    # end
+
 
     def set_default_values
         self.is_public ||= false

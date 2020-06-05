@@ -6,6 +6,14 @@
     <% end %>
 </ul>
 
+<h1>Narratives with Long Titles:</h1>
+
+<ul>
+    <% @narratives_with_long_titles.each do |narrative| %>
+        <li><%= link_to narrative.title, narrative_path(narrative) %></li>
+    <% end %>
+</ul>
+
 <% if !@personal_viewing %>
     <h1>Private Narratives:</h1>
     <ul>
